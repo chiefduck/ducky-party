@@ -51,26 +51,6 @@ export const Header = () => {
 
         {/* Cart + Mobile Menu */}
         <div className="flex items-center gap-4">
-          {/* Cart Icon - handled by CartDrawer component */}
-          <div className="hidden">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCartOpen(true)}
-              className="relative border-2 border-foreground hover:scale-110 hover:bg-primary hover:text-primary-foreground transition-transform"
-            >
-              <ShoppingCart className="h-5 w-5" />
-              {totalItems > 0 && (
-                <Badge
-                  variant="default"
-                  className="absolute -right-2 -top-2 h-6 w-6 rounded-full p-0 flex items-center justify-center animate-pulse"
-                >
-                  {totalItems}
-                </Badge>
-              )}
-            </Button>
-          </div>
-
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild className="md:hidden">
