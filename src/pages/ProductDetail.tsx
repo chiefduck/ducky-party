@@ -831,6 +831,45 @@ const ProductDetail = () => {
         </div>
       </section>
 
+      {/* Sticky Bottom Bar */}
+      <motion.div
+        initial={{ y: 100 }}
+        animate={{ y: showStickyBar ? 0 : 100 }}
+        transition={{ duration: 0.3 }}
+        className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t-4 border-foreground shadow-2xl"
+      >
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4 flex-1 min-w-0">
+              <div className="w-16 h-16 bg-secondary/20 rounded-md overflow-hidden flex-shrink-0">
+                {product.node.images.edges[0]?.node && (
+                  <img
+                    src={product.node.images.edges[0].node.url}
+                    alt={product.node.title}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-black truncate">{product.node.title}</h3>
+                <p className="text-primary font-bold">
+                  {selectedVariant.price.currencyCode} {parseFloat(selectedVariant.price.amount).toFixed(2)}
+                </p>
+              </div>
+            </div>
+            <Button
+              onClick={handleAddToCart}
+              size="lg"
+              className="gap-2 font-black border-4 border-foreground shadow-lg flex-shrink-0"
+              disabled={!selectedVariant.availableForSale}
+            >
+              <ShoppingCart className="w-5 h-5" />
+              <span className="hidden sm:inline">GRAB NOW</span>
+            </Button>
+          </div>
+        </div>
+      </motion.div>
+
       <WriteReviewModal 
         open={isReviewModalOpen}
         onOpenChange={setIsReviewModalOpen}
