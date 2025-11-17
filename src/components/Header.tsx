@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/CartContext";
+import { useCartStore } from "@/stores/cartStore";
 import logo from "@/assets/logo.svg";
 
 const menuItems = [
@@ -22,8 +22,10 @@ const menuItems = [
 ];
 
 export const Header = () => {
-  const { totalItems, openCart } = useCart();
+  const items = useCartStore(state => state.items);
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 h-20 border-b-4 border-foreground bg-background/80 backdrop-blur-md">
@@ -49,23 +51,25 @@ export const Header = () => {
 
         {/* Cart + Mobile Menu */}
         <div className="flex items-center gap-4">
-          {/* Cart Icon */}
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={openCart}
-            className="relative border-2 border-foreground hover:scale-110 hover:bg-primary hover:text-primary-foreground transition-transform"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            {totalItems > 0 && (
-              <Badge
-                variant="default"
-                className="absolute -right-2 -top-2 h-6 w-6 rounded-full p-0 flex items-center justify-center animate-pulse"
-              >
-                {totalItems}
-              </Badge>
-            )}
-          </Button>
+          {/* Cart Icon - handled by CartDrawer component */}
+          <div className="hidden">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setCartOpen(true)}
+              className="relative border-2 border-foreground hover:scale-110 hover:bg-primary hover:text-primary-foreground transition-transform"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {totalItems > 0 && (
+                <Badge
+                  variant="default"
+                  className="absolute -right-2 -top-2 h-6 w-6 rounded-full p-0 flex items-center justify-center animate-pulse"
+                >
+                  {totalItems}
+                </Badge>
+              )}
+            </Button>
+          </div>
 
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>

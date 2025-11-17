@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/contexts/CartContext";
-import { useToast } from "@/hooks/use-toast";
+import { useCartStore } from "@/stores/cartStore";
+import { toast } from "sonner";
 import productClassic from "@/assets/product-classic.png";
 
 const products = [
@@ -40,21 +40,9 @@ const comingSoon = [
 ];
 
 export const ProductSection = () => {
-  const { addItem, openCart } = useCart();
-  const { toast } = useToast();
   const [selectedPackSize, setSelectedPackSize] = useState<"4-pack" | "12-pack">("4-pack");
 
   const handleAddToCart = (product: typeof products[0]) => {
-    const price = selectedPackSize === "4-pack" ? 14.99 : 44.99;
-    
-    addItem({
-      productId: product.id,
-      name: product.name,
-      image: product.image,
-      price,
-      packSize: selectedPackSize,
-    });
-
     // Confetti burst
     confetti({
       particleCount: 100,
@@ -63,13 +51,9 @@ export const ProductSection = () => {
       colors: ["#FF6B9D", "#FFD93D", "#6BCB77", "#00D9FF"],
     });
 
-    toast({
-      title: "Added to cart! 🦆",
-      description: `${product.name} ${selectedPackSize} - Let's quack!`,
+    toast.success("Visit our Shop! 🦆", {
+      description: `Check out our full product lineup at /shop`,
     });
-
-    // Open cart after a short delay
-    setTimeout(() => openCart(), 500);
   };
 
   return (
