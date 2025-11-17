@@ -77,10 +77,23 @@ const Contact = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (validateForm()) {
+      // TODO: Replace with your Make.com webhook URL
+      // const webhookUrl = "YOUR_MAKE_COM_WEBHOOK_URL";
+      // 
+      // try {
+      //   await fetch(webhookUrl, {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify(formData),
+      //   });
+      // } catch (error) {
+      //   console.error("Error sending to webhook:", error);
+      // }
+      
       toast({
         title: "Message sent!",
         description: "Thanks for reaching out! We'll get back to you soon.",
@@ -97,10 +110,23 @@ const Contact = () => {
     }
   };
 
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (newsletterEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail)) {
+      // TODO: Replace with your Make.com webhook URL
+      // const webhookUrl = "YOUR_MAKE_COM_WEBHOOK_URL";
+      // 
+      // try {
+      //   await fetch(webhookUrl, {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({ email: newsletterEmail }),
+      //   });
+      // } catch (error) {
+      //   console.error("Error sending to webhook:", error);
+      // }
+      
       toast({
         title: "Welcome to the flock!",
         description: "You're subscribed to our newsletter!",

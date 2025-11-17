@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ProductSection } from "@/components/ProductSection";
 import { FeaturesBento } from "@/components/FeaturesBento";
+import { ValuePropositions } from "@/components/ValuePropositions";
 import { SocialProof } from "@/components/SocialProof";
 import { Footer } from "@/components/Footer";
 
@@ -50,6 +51,7 @@ const Index = () => {
       <Hero />
       <ProductSection />
       <FeaturesBento />
+      <ValuePropositions />
       <SocialProof />
       <Footer />
     </div>

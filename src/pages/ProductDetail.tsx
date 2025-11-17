@@ -195,21 +195,6 @@ const ProductDetail = () => {
 
       {/* Hero Section - Product Showcase */}
       <section className="py-12 bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10 relative overflow-hidden">
-        {/* Floating elements */}
-        <motion.div
-          className="absolute text-6xl opacity-10 top-10 right-10"
-          animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        >
-          🌊
-        </motion.div>
-        <motion.div
-          className="absolute text-6xl opacity-10 bottom-10 left-10"
-          animate={{ y: [0, -25, 0], rotate: [0, -10, 0] }}
-          transition={{ duration: 3.5, repeat: Infinity, delay: 0.5 }}
-        >
-          🍹
-        </motion.div>
 
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">

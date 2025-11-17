@@ -148,11 +148,11 @@ const About = () => {
               We're always looking for passionate people to help shape the future of drinking culture.
             </p>
             
-            <div className="inline-block bg-sunshine rounded-2xl border-4 border-foreground shadow-2xl p-4 rotate-[-2deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
+            <a href="/careers" className="inline-block bg-sunshine rounded-2xl border-4 border-foreground shadow-2xl p-4 rotate-[-2deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
               <button className="bg-background text-foreground px-12 py-6 rounded-xl text-2xl font-black hover:scale-105 transition-transform duration-200">
                 VIEW OPEN POSITIONS 💼
               </button>
-            </div>
+            </a>
           </div>
         </div>
       </section>

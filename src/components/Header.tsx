@@ -14,6 +14,7 @@ import { CartDrawer } from "@/components/CartDrawer";
 import logo from "@/assets/logo.svg";
 
 const menuItems = [
+  { label: "Home", path: "/" },
   { label: "Shop", path: "/shop" },
   { label: "Store Locator", path: "/store-locator" },
   { label: "Recipes", path: "/recipes" },

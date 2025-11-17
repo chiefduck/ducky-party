@@ -15,26 +15,6 @@ const duckPositions = [
 export const Hero = () => {
   return (
     <section className="relative min-h-screen rainbow-gradient flex items-center justify-center overflow-hidden py-20 px-4">
-      {/* Floating elements */}
-      {duckPositions.map((pos, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-6xl pointer-events-none"
-          style={{ top: pos.top, left: pos.left, right: pos.right }}
-          animate={{
-            y: [0, -30, 0],
-            rotate: [0, 10, -10, 0],
-          }}
-          transition={{
-            duration: 3 + i * 0.5,
-            repeat: Infinity,
-            delay: pos.delay,
-            ease: "easeInOut",
-          }}
-        >
-          🌊
-        </motion.div>
-      ))}
 
       <div className="relative z-10 text-center max-w-6xl mx-auto">
         {/* Logo */}
