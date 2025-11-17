@@ -40,7 +40,7 @@ const ProductDetail = () => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const reviewsPerPage = 3;
-  const addItem = useCartStore(state => state.addItem);
+  const { addItem, setIsCartOpen } = useCartStore();
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -84,6 +84,9 @@ const ProductDetail = () => {
     };
     
     addItem(cartItem);
+    
+    // Open cart drawer to show the item was added
+    setIsCartOpen(true);
     
     // Confetti burst
     confetti({
@@ -368,7 +371,7 @@ const ProductDetail = () => {
                 disabled={!selectedVariant.availableForSale}
               >
                 <ShoppingCart className="w-6 h-6" />
-                {selectedVariant.availableForSale ? "ADD TO CART" : "OUT OF STOCK"}
+                {selectedVariant.availableForSale ? "GRAB NOW" : "OUT OF STOCK"}
               </Button>
 
               {!selectedVariant.availableForSale && (
