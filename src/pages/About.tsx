@@ -17,7 +17,7 @@ const valueCards = [
     rotation: "rotate-[1deg]",
   },
   {
-    emoji: "🦆",
+    emoji: "💼",
     title: "Playful Sophistication",
     description: "Crafted with intention, delivered with a wink. Our drinks are thoughtfully made but never take themselves too seriously.",
     gradient: "from-accent via-primary to-secondary",

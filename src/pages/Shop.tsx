@@ -46,7 +46,7 @@ const Shop = () => {
     };
     
     addItem(cartItem);
-    toast.success("Added to cart! 🦆", {
+    toast.success("Added to cart!", {
       description: `${product.node.title} has been added to your cart`,
     });
   };
@@ -101,7 +101,7 @@ const Shop = () => {
           ) : products.length === 0 ? (
             <div className="text-center py-20">
               <ShoppingCart className="h-20 w-20 text-muted-foreground mx-auto mb-6" />
-              <h2 className="text-3xl font-bold mb-4">No Products Found 🦆</h2>
+              <h2 className="text-3xl font-bold mb-4">No Products Found</h2>
               <p className="text-xl text-muted-foreground mb-8">
                 We haven't added any products yet. Check back soon!
               </p>
@@ -135,8 +135,8 @@ const Shop = () => {
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-8xl">
-                          🦆
+                        <div className="w-full h-full flex items-center justify-center text-6xl text-muted-foreground">
+                          No Image
                         </div>
                       )}
                     </div>

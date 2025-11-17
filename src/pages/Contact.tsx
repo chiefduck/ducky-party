@@ -82,7 +82,7 @@ const Contact = () => {
     
     if (validateForm()) {
       toast({
-        title: "Message sent! 🦆",
+        title: "Message sent!",
         description: "Thanks for reaching out! We'll get back to you soon.",
       });
       setFormData({
@@ -102,7 +102,7 @@ const Contact = () => {
     
     if (newsletterEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail)) {
       toast({
-        title: "Welcome to the flock! 🦆",
+        title: "Welcome to the flock!",
         description: "You're subscribed to our newsletter!",
       });
       setNewsletterEmail("");
@@ -277,7 +277,7 @@ const Contact = () => {
                   size="lg"
                   className="w-full text-xl font-black"
                 >
-                  SEND MESSAGE 🦆
+                  SEND MESSAGE
                 </Button>
               </form>
             </div>
@@ -291,7 +291,7 @@ const Contact = () => {
           <div className="max-w-2xl mx-auto text-center">
             <div className="bg-card rounded-2xl border-4 border-foreground shadow-2xl p-12 rotate-[-1deg] hover:rotate-0 transition-all duration-300">
               <h2 className="text-5xl font-black mb-4 text-foreground">
-                JOIN THE FLOCK 🦆
+                JOIN THE FLOCK
               </h2>
               <p className="text-xl text-muted-foreground mb-8">
                 Get exclusive updates, special offers, and duck puns delivered straight to your inbox!

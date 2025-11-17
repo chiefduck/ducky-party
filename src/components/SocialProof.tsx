@@ -12,7 +12,7 @@ const badges = [
 
 const reviews = [
   {
-    text: "OMG these slap so hard!! I bring them to EVERY pool party now 🦆",
+    text: "OMG these slap so hard!! I bring them to EVERY pool party now",
     author: "Sarah, 24",
     color: "bg-primary",
   },

@@ -22,6 +22,7 @@ import Blog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
 import FAQ from "./pages/FAQ";
 import PressKit from "./pages/PressKit";
+import Careers from "./pages/Careers";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/press-kit" element={<PressKit />} />
+          <Route path="/careers" element={<Careers />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

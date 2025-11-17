@@ -67,7 +67,7 @@ const Auth = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            WELCOME BACK 🦆
+            WELCOME BACK
           </motion.h1>
           <motion.p
             className="text-lg md:text-xl text-foreground/90"
@@ -141,7 +141,7 @@ const Auth = () => {
                             Logging in...
                           </>
                         ) : (
-                          "Login 🦆"
+                          "Login"
                         )}
                       </Button>
                       <Button
@@ -231,7 +231,7 @@ const Auth = () => {
                             Creating account...
                           </>
                         ) : (
-                          "Create Account 🦆"
+                          "Create Account"
                         )}
                       </Button>
                     </CardFooter>
