@@ -1,5 +1,9 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
+import confetti from "canvas-confetti";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
+import { useToast } from "@/hooks/use-toast";
 import productClassic from "@/assets/product-classic.png";
 
 const products = [
@@ -36,6 +40,38 @@ const comingSoon = [
 ];
 
 export const ProductSection = () => {
+  const { addItem, openCart } = useCart();
+  const { toast } = useToast();
+  const [selectedPackSize, setSelectedPackSize] = useState<"4-pack" | "12-pack">("4-pack");
+
+  const handleAddToCart = (product: typeof products[0]) => {
+    const price = selectedPackSize === "4-pack" ? 14.99 : 44.99;
+    
+    addItem({
+      productId: product.id,
+      name: product.name,
+      image: product.image,
+      price,
+      packSize: selectedPackSize,
+    });
+
+    // Confetti burst
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ["#FF6B9D", "#FFD93D", "#6BCB77", "#00D9FF"],
+    });
+
+    toast({
+      title: "Added to cart! 🦆",
+      description: `${product.name} ${selectedPackSize} - Let's quack!`,
+    });
+
+    // Open cart after a short delay
+    setTimeout(() => openCart(), 500);
+  };
+
   return (
     <section className="py-24 px-4 bg-background relative overflow-hidden">
       {/* Background duckies */}
@@ -86,14 +122,32 @@ export const ProductSection = () => {
               <h3 className="text-3xl font-black text-foreground mb-4 text-center">
                 {product.name}
               </h3>
-              <p className="text-center text-xl font-bold mb-2">
-                4-Pack: <span className="text-primary">$14.99</span>
-              </p>
-              <p className="text-center text-xl font-bold mb-6">
-                12-Pack: <span className="text-primary">$44.99</span>
-              </p>
+              
+              {/* Pack Size Selector */}
+              <div className="flex gap-2 mb-4">
+                <Button
+                  variant={selectedPackSize === "4-pack" ? "default" : "outline"}
+                  onClick={() => setSelectedPackSize("4-pack")}
+                  className="flex-1 font-bold border-2 border-foreground"
+                >
+                  4-Pack
+                  <br />
+                  $14.99
+                </Button>
+                <Button
+                  variant={selectedPackSize === "12-pack" ? "default" : "outline"}
+                  onClick={() => setSelectedPackSize("12-pack")}
+                  className="flex-1 font-bold border-2 border-foreground"
+                >
+                  12-Pack
+                  <br />
+                  $44.99
+                </Button>
+              </div>
+              
               <Button
-                className="w-full bg-primary hover:bg-primary/90 text-white font-black text-xl py-6 rounded-full border-4 border-foreground shadow-lg"
+                onClick={() => handleAddToCart(product)}
+                className="w-full bg-primary hover:bg-primary/90 text-white font-black text-xl py-6 rounded-full border-4 border-foreground shadow-lg hover:scale-105 transition-transform"
               >
                 GRAB IT 🦆
               </Button>

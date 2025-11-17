@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
 import logo from "@/assets/logo.svg";
 
 const menuItems = [
@@ -21,7 +22,7 @@ const menuItems = [
 ];
 
 export const Header = () => {
-  const [cartCount] = useState(0);
+  const { totalItems, openCart } = useCart();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -52,15 +53,16 @@ export const Header = () => {
           <Button
             variant="outline"
             size="icon"
+            onClick={openCart}
             className="relative border-2 border-foreground hover:scale-110 hover:bg-primary hover:text-primary-foreground transition-transform"
           >
             <ShoppingCart className="h-5 w-5" />
-            {cartCount > 0 && (
+            {totalItems > 0 && (
               <Badge
                 variant="default"
                 className="absolute -right-2 -top-2 h-6 w-6 rounded-full p-0 flex items-center justify-center animate-pulse"
               >
-                {cartCount}
+                {totalItems}
               </Badge>
             )}
           </Button>
