@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import confetti from "canvas-confetti";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
+import { FutureFlavors } from "@/components/FutureFlavors";
 import { ProductSection } from "@/components/ProductSection";
 import { FeaturesBento } from "@/components/FeaturesBento";
 import { ValuePropositions } from "@/components/ValuePropositions";
@@ -51,6 +52,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <Hero />
+      <FutureFlavors />
       <ProductSection />
       <FeaturesBento />
       <ValuePropositions />
