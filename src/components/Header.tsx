@@ -16,6 +16,8 @@ const menuItems = [
   { label: "Shop", path: "/shop" },
   { label: "Store Locator", path: "/store-locator" },
   { label: "Recipes", path: "/recipes" },
+  { label: "Blog", path: "/blog" },
+  { label: "FAQ", path: "/faq" },
   { label: "About", path: "/about" },
   { label: "Contact", path: "/contact" },
 ];

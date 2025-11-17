@@ -80,6 +80,12 @@ export const Footer = () => {
               <a href="/shop" className="hover:text-primary transition-colors">
                 Shop
               </a>
+              <a href="/blog" className="hover:text-primary transition-colors">
+                Blog
+              </a>
+              <a href="/faq" className="hover:text-primary transition-colors">
+                FAQ
+              </a>
               <a href="/store-locator" className="hover:text-primary transition-colors">
                 Store Locator
               </a>
