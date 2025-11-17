@@ -51,19 +51,19 @@ export const ProductSection = () => {
       colors: ["#FF6B9D", "#FFD93D", "#6BCB77", "#00D9FF"],
     });
 
-    toast.success("Visit our Shop! 🦆", {
+    toast.success("Visit our Shop!", {
       description: `Check out our full product lineup at /shop`,
     });
   };
 
   return (
     <section className="py-24 px-4 bg-background relative overflow-hidden">
-      {/* Background duckies */}
+      {/* Background elements */}
       <div className="absolute top-10 right-10 text-8xl opacity-20 bounce-float">
-        🦆
+        🌊
       </div>
       <div className="absolute bottom-20 left-10 text-8xl opacity-20 bounce-float" style={{ animationDelay: "1s" }}>
-        🦆
+        🍹
       </div>
 
       <div className="max-w-7xl mx-auto">
@@ -74,7 +74,7 @@ export const ProductSection = () => {
           className="text-7xl md:text-9xl font-black text-center mb-20 text-foreground"
           style={{ textShadow: "3px 3px 0px rgba(0,0,0,0.1)" }}
         >
-          THE FLOCK 🦆
+          THE FLOCK
         </motion.h2>
 
         {/* Product Grid - Polaroid Style */}
@@ -133,7 +133,7 @@ export const ProductSection = () => {
                 onClick={() => handleAddToCart(product)}
                 className="w-full bg-primary hover:bg-primary/90 text-white font-black text-xl py-6 rounded-full border-4 border-foreground shadow-lg hover:scale-105 transition-transform"
               >
-                GRAB IT 🦆
+                GRAB IT
               </Button>
             </motion.div>
           ))}

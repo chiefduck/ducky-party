@@ -27,6 +27,7 @@ import confetti from "canvas-confetti";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 import { useCartStore, CartItem } from "@/stores/cartStore";
 import { toast } from "sonner";
+import { WriteReviewModal } from "@/components/WriteReviewModal";
 
 const ProductDetail = () => {
   const { handle } = useParams();
@@ -36,6 +37,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const addItem = useCartStore(state => state.addItem);
 
   useEffect(() => {
@@ -89,7 +91,7 @@ const ProductDetail = () => {
       colors: ["#FF6B9D", "#FFD93D", "#6BCB77", "#00D9FF"],
     });
     
-    toast.success("Added to cart! 🦆", {
+    toast.success("Added to cart!", {
       description: `${quantity}x ${product.node.title} added to your cart`,
     });
   };
@@ -120,7 +122,7 @@ const ProductDetail = () => {
       <div className="min-h-screen bg-background">
         <Header />
         <div className="container mx-auto px-4 py-20 text-center">
-          <h1 className="text-4xl font-bold mb-4">Product Not Found 🦆</h1>
+          <h1 className="text-4xl font-bold mb-4">Product Not Found</h1>
           <Button onClick={() => navigate("/shop")}>Back to Shop</Button>
         </div>
         <Footer />
@@ -193,13 +195,13 @@ const ProductDetail = () => {
 
       {/* Hero Section - Product Showcase */}
       <section className="py-12 bg-gradient-to-br from-primary/10 via-accent/10 to-secondary/10 relative overflow-hidden">
-        {/* Floating Duckies */}
+        {/* Floating elements */}
         <motion.div
           className="absolute text-6xl opacity-10 top-10 right-10"
           animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
           transition={{ duration: 3, repeat: Infinity }}
         >
-          🦆
+          🌊
         </motion.div>
         <motion.div
           className="absolute text-6xl opacity-10 bottom-10 left-10"
@@ -226,8 +228,8 @@ const ProductDetail = () => {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-9xl animate-bounce">
-                    🦆
+                  <div className="w-full h-full flex items-center justify-center text-6xl text-muted-foreground">
+                    No Image
                   </div>
                 )}
                 
@@ -379,7 +381,7 @@ const ProductDetail = () => {
                 disabled={!selectedVariant.availableForSale}
               >
                 <ShoppingCart className="w-6 h-6" />
-                {selectedVariant.availableForSale ? "ADD TO CART 🦆" : "OUT OF STOCK"}
+                {selectedVariant.availableForSale ? "ADD TO CART" : "OUT OF STOCK"}
               </Button>
 
               {!selectedVariant.availableForSale && (
@@ -402,7 +404,7 @@ const ProductDetail = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl font-black text-center mb-12">
-              WHY YOU'LL LOVE IT 🦆
+              WHY YOU'LL LOVE IT
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -573,7 +575,7 @@ const ProductDetail = () => {
             className="max-w-6xl mx-auto"
           >
             <h2 className="text-4xl md:text-5xl font-black text-center mb-12">
-              WHAT OUR FLOCK SAYS 🦆
+              WHAT OUR CUSTOMERS SAY
             </h2>
 
             {/* Rating Summary */}
@@ -711,6 +713,7 @@ const ProductDetail = () => {
                 variant="outline" 
                 size="lg"
                 className="font-black border-2"
+                onClick={() => setIsReviewModalOpen(true)}
               >
                 Write a Review
               </Button>
@@ -721,15 +724,6 @@ const ProductDetail = () => {
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-primary via-accent to-secondary relative overflow-hidden">
-        <motion.div
-          className="absolute text-9xl opacity-20"
-          style={{ top: "20%", right: "10%" }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        >
-          🦆
-        </motion.div>
-        
         <div className="container mx-auto px-4 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -739,10 +733,10 @@ const ProductDetail = () => {
             className="space-y-6"
           >
             <h2 className="text-5xl md:text-6xl font-black text-primary-foreground">
-              READY TO QUACK UP? 🦆
+              READY TO TRY IT?
             </h2>
             <p className="text-2xl text-primary-foreground/90 max-w-2xl mx-auto">
-              Join the flock and taste the best non-alcoholic margaritas around!
+              Join thousands of happy customers and taste the best non-alcoholic drinks around!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
@@ -766,6 +760,12 @@ const ProductDetail = () => {
           </motion.div>
         </div>
       </section>
+
+      <WriteReviewModal 
+        open={isReviewModalOpen}
+        onOpenChange={setIsReviewModalOpen}
+        productTitle={product.node.title}
+      />
 
       <Footer />
     </div>

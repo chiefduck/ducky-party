@@ -55,7 +55,7 @@ export const CartDrawer = () => {
       
       <SheetContent className="w-full sm:max-w-lg flex flex-col h-full">
         <SheetHeader className="flex-shrink-0">
-          <SheetTitle>Shopping Cart 🦆</SheetTitle>
+          <SheetTitle>Shopping Cart</SheetTitle>
           <SheetDescription>
             {totalItems === 0 ? "Your cart is empty" : `${totalItems} item${totalItems !== 1 ? 's' : ''} in your cart`}
           </SheetDescription>
@@ -84,8 +84,8 @@ export const CartDrawer = () => {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center text-2xl">
-                            🦆
+                          <div className="w-full h-full flex items-center justify-center text-2xl text-muted-foreground">
+                            📦
                           </div>
                         )}
                       </div>

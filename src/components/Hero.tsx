@@ -15,7 +15,7 @@ const duckPositions = [
 export const Hero = () => {
   return (
     <section className="relative min-h-screen rainbow-gradient flex items-center justify-center overflow-hidden py-20 px-4">
-      {/* Floating rubber duckies */}
+      {/* Floating elements */}
       {duckPositions.map((pos, i) => (
         <motion.div
           key={i}
@@ -32,7 +32,7 @@ export const Hero = () => {
             ease: "easeInOut",
           }}
         >
-          🦆
+          🌊
         </motion.div>
       ))}
 
@@ -76,7 +76,7 @@ export const Hero = () => {
             size="lg"
             className="text-2xl font-black py-8 px-12 rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105"
           >
-            QUACK ONE OPEN 🦆
+            QUACK ONE OPEN
           </Button>
           <Button
             size="lg"
