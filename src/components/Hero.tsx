@@ -32,9 +32,9 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black text-foreground mb-6 sm:mb-8 leading-tight sm:leading-none px-4"
+          className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black text-foreground mb-6 sm:mb-8 leading-[1.1] sm:leading-none px-2 sm:px-4"
           style={{
-            textShadow: "4px 4px 0px rgba(0,0,0,0.2)",
+            textShadow: "3px 3px 0px rgba(0,0,0,0.2)",
             transform: "rotate(-2deg)",
           }}
         >
