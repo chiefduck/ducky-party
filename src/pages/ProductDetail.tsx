@@ -19,7 +19,8 @@ import {
   Share2,
   Truck,
   Shield,
-  RefreshCw
+  RefreshCw,
+  Star
 } from "lucide-react";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
@@ -557,6 +558,163 @@ const ProductDetail = () => {
                 </div>
               </TabsContent>
             </Tabs>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Customer Reviews */}
+      <section className="py-16 bg-background">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-6xl mx-auto"
+          >
+            <h2 className="text-4xl md:text-5xl font-black text-center mb-12">
+              WHAT OUR FLOCK SAYS 🦆
+            </h2>
+
+            {/* Rating Summary */}
+            <div className="bg-card border-4 border-foreground rounded-xl p-8 mb-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="text-center md:text-left">
+                  <div className="text-6xl font-black mb-2">4.8</div>
+                  <div className="flex items-center justify-center md:justify-start gap-1 mb-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`w-6 h-6 ${star <= 4 ? 'fill-primary text-primary' : 'fill-muted text-muted'}`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-lg font-bold text-muted-foreground">
+                    Based on 247 reviews
+                  </p>
+                </div>
+                
+                <div className="space-y-2">
+                  {[
+                    { stars: 5, count: 189, percent: 77 },
+                    { stars: 4, count: 42, percent: 17 },
+                    { stars: 3, count: 12, percent: 5 },
+                    { stars: 2, count: 3, percent: 1 },
+                    { stars: 1, count: 1, percent: 0 }
+                  ].map((rating) => (
+                    <div key={rating.stars} className="flex items-center gap-3">
+                      <span className="text-sm font-bold w-12">{rating.stars} star</span>
+                      <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-primary transition-all"
+                          style={{ width: `${rating.percent}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-bold w-12 text-right">{rating.count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Individual Reviews */}
+            <div className="space-y-6">
+              {[
+                {
+                  id: 1,
+                  author: "Sarah M.",
+                  rating: 5,
+                  date: "2024-01-15",
+                  verified: true,
+                  title: "Best Non-Alcoholic Margarita Ever!",
+                  text: "I was skeptical at first, but this drink completely exceeded my expectations! The lime flavor is perfectly balanced and it actually tastes like a real margarita. I've been buying these by the case now. Perfect for our weekly game nights!"
+                },
+                {
+                  id: 2,
+                  author: "Mike R.",
+                  rating: 5,
+                  date: "2024-01-10",
+                  verified: true,
+                  title: "Great for Parties",
+                  text: "Served these at my birthday party and everyone was asking where I got them! Nobody could believe they were non-alcoholic. The packaging is fun too - the rubber duck theme always gets a smile."
+                },
+                {
+                  id: 3,
+                  author: "Jessica L.",
+                  rating: 4,
+                  date: "2024-01-05",
+                  verified: true,
+                  title: "Really Refreshing",
+                  text: "Love the taste! Only giving 4 stars because I wish they came in bigger bottles. The flavor is spot-on though, and I appreciate that there's no sugar. Will definitely be ordering more!"
+                },
+                {
+                  id: 4,
+                  author: "David K.",
+                  rating: 5,
+                  date: "2023-12-28",
+                  verified: true,
+                  title: "Perfect Alternative",
+                  text: "As someone who doesn't drink alcohol, finding quality alternatives can be challenging. These drinks are absolutely perfect. Great taste, fun branding, and they don't make me feel like I'm missing out at social gatherings."
+                }
+              ].map((review, index) => (
+                <motion.div
+                  key={review.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-card border-4 border-foreground rounded-xl p-6 hover:shadow-lg transition-shadow"
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="font-black text-lg">{review.author}</span>
+                        {review.verified && (
+                          <Badge className="text-xs">Verified Buyer</Badge>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star
+                            key={star}
+                            className={`w-5 h-5 ${star <= review.rating ? 'fill-primary text-primary' : 'fill-muted text-muted'}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      {new Date(review.date).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                      })}
+                    </span>
+                  </div>
+                  <h4 className="font-black text-xl mb-2">{review.title}</h4>
+                  <p className="text-muted-foreground leading-relaxed">{review.text}</p>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Add Review CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-8 text-center"
+            >
+              <p className="text-lg font-bold text-muted-foreground mb-4">
+                Tried our drinks? Share your experience!
+              </p>
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="font-black border-2"
+              >
+                Write a Review
+              </Button>
+            </motion.div>
           </motion.div>
         </div>
       </section>
