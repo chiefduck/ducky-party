@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -5,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, DollarSign, Users, Heart, Zap, Coffee } from "lucide-react";
+import { ApplyJobModal } from "@/components/ApplyJobModal";
 
 const positions = [
   {
@@ -103,6 +105,14 @@ const benefits = [
 ];
 
 export default function Careers() {
+  const [selectedPosition, setSelectedPosition] = useState<typeof positions[0] | null>(null);
+  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+
+  const handleApplyClick = (position: typeof positions[0]) => {
+    setSelectedPosition(position);
+    setIsApplyModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -249,7 +259,7 @@ export default function Careers() {
                   <CardFooter>
                     <Button 
                       className="w-full font-black text-lg"
-                      onClick={() => window.open(`mailto:careers@rubberduckydrink.com?subject=Application: ${position.title}`, '_blank')}
+                      onClick={() => handleApplyClick(position)}
                     >
                       Apply Now
                     </Button>
@@ -283,6 +293,14 @@ export default function Careers() {
           </Button>
         </motion.section>
       </main>
+
+      {selectedPosition && (
+        <ApplyJobModal
+          open={isApplyModalOpen}
+          onOpenChange={setIsApplyModalOpen}
+          position={selectedPosition}
+        />
+      )}
 
       <Footer />
     </div>

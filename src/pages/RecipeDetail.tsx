@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -5,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, Users, ChefHat, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { recipes } from "@/data/recipes";
+import { RateRecipeModal } from "@/components/RateRecipeModal";
 
 const RecipeDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const recipe = recipes.find((r) => r.id === Number(id));
+  const [isRateModalOpen, setIsRateModalOpen] = useState(false);
 
   if (!recipe) {
     return (
@@ -255,13 +258,19 @@ const RecipeDetail = () => {
               drink!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="secondary" size="lg" className="text-xl px-8 py-6">
+              <Button 
+                variant="secondary" 
+                size="lg" 
+                className="text-xl px-8 py-6"
+                onClick={() => setIsRateModalOpen(true)}
+              >
                 RATE THIS RECIPE ⭐
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 className="text-xl px-8 py-6 bg-background/10 border-primary-foreground/20 text-primary-foreground hover:bg-background/20"
+                onClick={() => setIsRateModalOpen(true)}
               >
                 SHARE YOUR PHOTO 📸
               </Button>
@@ -269,6 +278,12 @@ const RecipeDetail = () => {
           </motion.div>
         </div>
       </section>
+
+      <RateRecipeModal
+        open={isRateModalOpen}
+        onOpenChange={setIsRateModalOpen}
+        recipeTitle={recipe.title}
+      />
 
       <Footer />
     </div>
