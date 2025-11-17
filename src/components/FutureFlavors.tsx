@@ -4,11 +4,11 @@ import { Badge } from "@/components/ui/badge";
 
 const futureFlavors = [
   {
-    name: "Strawberry Daiquiri",
-    emoji: "🍓",
-    description: "Sweet and tangy perfection",
-    color: "from-pink-400/20 to-red-400/20",
-    borderColor: "border-pink-400"
+    name: "Passionfruit Guava",
+    emoji: "🥭",
+    description: "Exotic tropical fusion",
+    color: "from-orange-400/20 to-yellow-400/20",
+    borderColor: "border-orange-400"
   },
   {
     name: "Piña Colada",
@@ -18,10 +18,10 @@ const futureFlavors = [
     borderColor: "border-yellow-400"
   },
   {
-    name: "Blue Raspberry",
-    emoji: "💙",
-    description: "Bold berry blast",
-    color: "from-blue-400/20 to-cyan-400/20",
+    name: "Blueberry Mint",
+    emoji: "🫐",
+    description: "Refreshing berry coolness",
+    color: "from-blue-400/20 to-green-400/20",
     borderColor: "border-blue-400"
   }
 ];
