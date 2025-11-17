@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, ShoppingCart, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import {
   Sheet,
@@ -8,9 +8,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useCartStore } from "@/stores/cartStore";
+import { CartDrawer } from "@/components/CartDrawer";
 import logo from "@/assets/logo.svg";
 
 const menuItems = [
@@ -22,10 +21,7 @@ const menuItems = [
 ];
 
 export const Header = () => {
-  const items = useCartStore(state => state.items);
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 h-20 border-b-4 border-foreground bg-background/80 backdrop-blur-md">
@@ -51,6 +47,9 @@ export const Header = () => {
 
         {/* Cart + Mobile Menu */}
         <div className="flex items-center gap-4">
+          {/* Cart Button - Always visible */}
+          <CartDrawer />
+
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <SheetTrigger asChild className="md:hidden">
