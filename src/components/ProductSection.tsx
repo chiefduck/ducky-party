@@ -41,9 +41,71 @@ const comingSoon = [
 
 export const ProductSection = () => {
   const [selectedPackSize, setSelectedPackSize] = useState<"4-pack" | "12-pack">("4-pack");
-  const setIsCartOpen = useCartStore((state) => state.setIsCartOpen);
+  const { addItem, setIsCartOpen } = useCartStore();
 
   const handleAddToCart = (product: typeof products[0]) => {
+    // Create a proper cart item with mock Shopify structure
+    const price = selectedPackSize === "4-pack" ? "18.99" : "54.99";
+    const cartItem = {
+      product: {
+        node: {
+          id: `gid://shopify/Product/${product.id}`,
+          title: product.name,
+          description: "Refreshing non-alcoholic mocktail",
+          handle: product.name.toLowerCase().replace(/\s+/g, '-'),
+          priceRange: {
+            minVariantPrice: {
+              amount: price,
+              currencyCode: "USD"
+            }
+          },
+          images: {
+            edges: [{
+              node: {
+                url: product.image,
+                altText: product.name
+              }
+            }]
+          },
+          variants: {
+            edges: [{
+              node: {
+                id: `gid://shopify/ProductVariant/${product.id}-${selectedPackSize}`,
+                title: selectedPackSize,
+                price: {
+                  amount: price,
+                  currencyCode: "USD"
+                },
+                availableForSale: true,
+                selectedOptions: [{
+                  name: "Pack Size",
+                  value: selectedPackSize
+                }]
+              }
+            }]
+          },
+          options: [{
+            name: "Pack Size",
+            values: ["4-pack", "12-pack"]
+          }]
+        }
+      },
+      variantId: `gid://shopify/ProductVariant/${product.id}-${selectedPackSize}`,
+      variantTitle: selectedPackSize,
+      price: {
+        amount: price,
+        currencyCode: "USD"
+      },
+      quantity: 1,
+      selectedOptions: [{
+        name: "Pack Size",
+        value: selectedPackSize
+      }]
+    };
+
+    // Add to cart
+    addItem(cartItem);
+
     // Confetti burst
     confetti({
       particleCount: 100,
