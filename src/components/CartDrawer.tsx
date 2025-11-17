@@ -160,20 +160,17 @@ export const CartDrawer = () => {
                 
                 <Button 
                   onClick={handleCheckout}
-                  className="w-full" 
+                  className="w-full font-black text-lg" 
                   size="lg"
                   disabled={items.length === 0 || isLoading}
                 >
                   {isLoading ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Creating Checkout...
+                      Processing...
                     </>
                   ) : (
-                    <>
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Checkout with Shopify
-                    </>
+                    "GRAB NOW"
                   )}
                 </Button>
               </div>
