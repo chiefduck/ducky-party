@@ -6,10 +6,16 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, User, ArrowLeft, Share2 } from "lucide-react";
 import { Link, useParams, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function BlogDetail() {
   const { id } = useParams();
   const article = articles.find(a => a.id === id);
+
+  // Scroll to top when article changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   if (!article) {
     return <Navigate to="/blog" replace />;

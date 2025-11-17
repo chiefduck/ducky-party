@@ -95,6 +95,9 @@ export const Footer = () => {
               <a href="/wholesale" className="hover:text-primary transition-colors">
                 Wholesale
               </a>
+              <a href="/press-kit" className="hover:text-primary transition-colors">
+                Press Kit
+              </a>
             </div>
             <div className="flex flex-wrap justify-center gap-4 text-sm font-bold opacity-75">
               <a href="/terms" className="hover:text-primary transition-colors">
