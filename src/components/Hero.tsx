@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 import logo from "@/assets/logo.svg";
 
 const duckPositions = [
@@ -104,18 +105,22 @@ export const Hero = () => {
           className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-12 px-4 w-full max-w-2xl mx-auto"
         >
           <Button
+            asChild
             size="lg"
             className="text-lg sm:text-2xl font-black py-6 sm:py-8 px-8 sm:px-12 rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105 w-full sm:w-auto"
           >
-            QUACK ONE OPEN
+            <Link to="/shop">QUACK ONE OPEN</Link>
           </Button>
           <Button
+            asChild
             size="lg"
             variant="outline"
             className="text-lg sm:text-2xl font-black py-6 sm:py-8 px-8 sm:px-12 rounded-full border-4 border-foreground bg-background hover:bg-secondary transition-all hover:scale-105 shadow-lg w-full sm:w-auto"
           >
-            <MapPin className="mr-2 w-5 h-5 sm:w-6 sm:h-6" />
-            FIND NEAR YOU
+            <Link to="/store-locator">
+              <MapPin className="mr-2 w-5 h-5 sm:w-6 sm:h-6" />
+              FIND NEAR YOU
+            </Link>
           </Button>
         </motion.div>
 

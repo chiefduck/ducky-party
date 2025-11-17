@@ -41,6 +41,7 @@ const comingSoon = [
 
 export const ProductSection = () => {
   const [selectedPackSize, setSelectedPackSize] = useState<"4-pack" | "12-pack">("4-pack");
+  const setIsCartOpen = useCartStore((state) => state.setIsCartOpen);
 
   const handleAddToCart = (product: typeof products[0]) => {
     // Confetti burst
@@ -51,9 +52,12 @@ export const ProductSection = () => {
       colors: ["#FF6B9D", "#FFD93D", "#6BCB77", "#00D9FF"],
     });
 
-    toast.success("Visit our Shop!", {
-      description: `Check out our full product lineup at /shop`,
+    toast.success("Added to cart!", {
+      description: `${product.name} ${selectedPackSize} added to your cart`,
     });
+
+    // Open the cart drawer
+    setIsCartOpen(true);
   };
 
   return (

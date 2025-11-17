@@ -22,6 +22,7 @@ interface CartStore {
   cartId: string | null;
   checkoutUrl: string | null;
   isLoading: boolean;
+  isCartOpen: boolean;
   
   // Actions
   addItem: (item: CartItem) => void;
@@ -31,6 +32,7 @@ interface CartStore {
   setCartId: (cartId: string) => void;
   setCheckoutUrl: (url: string) => void;
   setLoading: (loading: boolean) => void;
+  setIsCartOpen: (isOpen: boolean) => void;
   createCheckout: () => Promise<void>;
 }
 
@@ -118,6 +120,7 @@ export const useCartStore = create<CartStore>()(
       cartId: null,
       checkoutUrl: null,
       isLoading: false,
+      isCartOpen: false,
 
       addItem: (item) => {
         const { items } = get();
@@ -162,6 +165,7 @@ export const useCartStore = create<CartStore>()(
       setCartId: (cartId) => set({ cartId }),
       setCheckoutUrl: (checkoutUrl) => set({ checkoutUrl }),
       setLoading: (isLoading) => set({ isLoading }),
+      setIsCartOpen: (isCartOpen) => set({ isCartOpen }),
 
       createCheckout: async () => {
         const { items, setLoading, setCheckoutUrl } = get();
