@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import confetti from "canvas-confetti";
+import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { ProductSection } from "@/components/ProductSection";
 import { FeaturesBento } from "@/components/FeaturesBento";
@@ -45,6 +46,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
+      <Header />
       <Hero />
       <ProductSection />
       <FeaturesBento />
