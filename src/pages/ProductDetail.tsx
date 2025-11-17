@@ -34,6 +34,7 @@ const ProductDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
+  const [showStickyBar, setShowStickyBar] = useState(false);
   const addItem = useCartStore(state => state.addItem);
 
   useEffect(() => {
@@ -52,6 +53,16 @@ const ProductDetail = () => {
 
     loadProduct();
   }, [handle]);
+
+  // Sticky bar scroll handler
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowStickyBar(window.scrollY > 500);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -121,6 +132,52 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+
+      {/* Sticky Add to Cart Bar - Mobile Only */}
+      {product && showStickyBar && (
+        <motion.div
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 100, opacity: 0 }}
+          className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-background border-t-4 border-foreground shadow-2xl p-4"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex-1">
+              <p className="font-bold text-sm truncate">{product.node.title}</p>
+              <p className="text-lg font-black text-primary">
+                ${parseFloat(product.node.variants.edges[selectedVariantIndex].node.price.amount).toFixed(2)}
+              </p>
+            </div>
+            <div className="flex items-center gap-2 border-2 border-foreground rounded-lg px-2 py-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              >
+                <Minus className="h-4 w-4" />
+              </Button>
+              <span className="font-bold w-6 text-center">{quantity}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={() => setQuantity(quantity + 1)}
+              >
+                <Plus className="h-4 w-4" />
+              </Button>
+            </div>
+            <Button
+              onClick={handleAddToCart}
+              className="gap-2 font-black border-2 border-foreground"
+              disabled={!product.node.variants.edges[selectedVariantIndex].node.availableForSale}
+            >
+              <ShoppingCart className="w-4 h-4" />
+              Add
+            </Button>
+          </div>
+        </motion.div>
+      )}
 
       <div className="container mx-auto px-4 pt-8">
         <Button
