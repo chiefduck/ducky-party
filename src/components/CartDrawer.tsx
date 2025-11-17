@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -9,15 +8,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2 } from "lucide-react";
+import { ShoppingCart, Minus, Plus, Trash2, ExternalLink, Loader2, X } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { toast } from "sonner";
 
 export const CartDrawer = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const { 
     items, 
-    isLoading, 
+    isLoading,
+    isCartOpen,
+    setIsCartOpen,
     updateQuantity, 
     removeItem, 
     createCheckout 
@@ -32,7 +32,7 @@ export const CartDrawer = () => {
       const checkoutUrl = useCartStore.getState().checkoutUrl;
       if (checkoutUrl) {
         window.open(checkoutUrl, '_blank');
-        setIsOpen(false);
+        setIsCartOpen(false);
       }
     } catch (error) {
       console.error('Checkout failed:', error);
@@ -41,7 +41,7 @@ export const CartDrawer = () => {
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
       <SheetTrigger asChild>
         <Button variant="outline" size="icon" className="relative">
           <ShoppingCart className="h-5 w-5" />
@@ -55,10 +55,22 @@ export const CartDrawer = () => {
       
       <SheetContent className="w-full sm:max-w-lg flex flex-col h-full">
         <SheetHeader className="flex-shrink-0">
-          <SheetTitle>Shopping Cart</SheetTitle>
-          <SheetDescription>
-            {totalItems === 0 ? "Your cart is empty" : `${totalItems} item${totalItems !== 1 ? 's' : ''} in your cart`}
-          </SheetDescription>
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <SheetTitle>Shopping Cart</SheetTitle>
+              <SheetDescription>
+                {totalItems === 0 ? "Your cart is empty" : `${totalItems} item${totalItems !== 1 ? 's' : ''} in your cart`}
+              </SheetDescription>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="sm:hidden"
+              onClick={() => setIsCartOpen(false)}
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
         </SheetHeader>
         
         <div className="flex flex-col flex-1 pt-6 min-h-0">
