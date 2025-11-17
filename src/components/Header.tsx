@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, ShoppingCart } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { Link } from "react-router-dom";
 import {
@@ -10,7 +10,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { CartDrawer } from "@/components/CartDrawer";
+import { useCartStore } from "@/stores/cartStore";
 import logo from "@/assets/logo.svg";
 
 const menuItems = [
@@ -26,9 +28,13 @@ const menuItems = [
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { items, setIsCartOpen } = useCartStore();
+  
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const totalPrice = items.reduce((sum, item) => sum + (parseFloat(item.price.amount) * item.quantity), 0);
 
   return (
-    <header className="sticky top-0 z-50 h-20 border-b-4 border-foreground bg-background/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 h-20 border-b-4 border-foreground bg-background/95 backdrop-blur-md shadow-lg">
       <div className="container mx-auto flex h-full items-center justify-between px-5">
         {/* Logo */}
         <NavLink to="/" className="flex-shrink-0">
@@ -49,7 +55,7 @@ export const Header = () => {
           ))}
         </nav>
 
-        {/* Cart + Login + Mobile Menu */}
+        {/* Cart Preview + Login + Mobile Menu */}
         <div className="flex items-center gap-4">
           {/* Login Button - Desktop */}
           <Link to="/auth" className="hidden md:block">
@@ -58,8 +64,31 @@ export const Header = () => {
             </Button>
           </Link>
           
-          {/* Cart Button - Always visible */}
-          <CartDrawer />
+          {/* Mini Cart Preview - Desktop */}
+          <div 
+            className="hidden md:flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => setIsCartOpen(true)}
+          >
+            <div className="text-right">
+              <div className="text-xs font-bold text-muted-foreground">Cart</div>
+              <div className="text-sm font-black text-foreground">
+                {totalItems > 0 ? `$${totalPrice.toFixed(2)}` : '$0.00'}
+              </div>
+            </div>
+            <div className="relative">
+              <ShoppingCart className="h-6 w-6" />
+              {totalItems > 0 && (
+                <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs bg-accent">
+                  {totalItems}
+                </Badge>
+              )}
+            </div>
+          </div>
+          
+          {/* Cart Drawer - Mobile only now */}
+          <div className="md:hidden">
+            <CartDrawer />
+          </div>
 
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>

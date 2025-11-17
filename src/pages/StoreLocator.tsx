@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SuggestLocationModal } from "@/components/SuggestLocationModal";
 
 interface Store {
   id: number;
@@ -106,6 +107,7 @@ const borderColors = ["border-primary", "border-secondary", "border-accent", "bo
 const StoreLocator = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredStores, setFilteredStores] = useState(stores);
+  const [isSuggestModalOpen, setIsSuggestModalOpen] = useState(false);
 
   const handleSearch = () => {
     if (!searchQuery.trim()) {
@@ -256,6 +258,7 @@ const StoreLocator = () => {
             size="lg"
             variant="outline"
             className="border-4 border-foreground font-black text-xl px-8 py-6 hover:bg-secondary hover:scale-110 transition-transform"
+            onClick={() => setIsSuggestModalOpen(true)}
           >
             SUGGEST A LOCATION 🦆
           </Button>
@@ -266,12 +269,18 @@ const StoreLocator = () => {
             <Button
               size="lg"
               className="border-4 border-foreground font-black text-xl px-8 py-6 hover:scale-110 transition-transform"
+              onClick={() => window.location.href = '/shop'}
             >
               SHOP NOW 🛒
             </Button>
           </div>
         </div>
       </section>
+
+      <SuggestLocationModal 
+        open={isSuggestModalOpen} 
+        onOpenChange={setIsSuggestModalOpen} 
+      />
 
       <Footer />
     </div>
