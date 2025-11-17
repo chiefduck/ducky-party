@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
+import { Link } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -47,8 +48,15 @@ export const Header = () => {
           ))}
         </nav>
 
-        {/* Cart + Mobile Menu */}
+        {/* Cart + Login + Mobile Menu */}
         <div className="flex items-center gap-4">
+          {/* Login Button - Desktop */}
+          <Link to="/auth" className="hidden md:block">
+            <Button variant="outline" size="icon" className="border-2 border-foreground">
+              <User className="h-5 w-5" />
+            </Button>
+          </Link>
+          
           {/* Cart Button - Always visible */}
           <CartDrawer />
 
@@ -91,6 +99,14 @@ export const Header = () => {
                     {item.label}
                   </NavLink>
                 ))}
+                <Link
+                  to="/auth"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-foreground text-2xl font-bold transition-all hover:text-primary hover:scale-105 flex items-center gap-3"
+                >
+                  <User className="h-6 w-6" />
+                  Login
+                </Link>
               </nav>
             </SheetContent>
           </Sheet>
