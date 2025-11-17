@@ -1,114 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Clock, Users, ChefHat } from "lucide-react";
 import { motion } from "framer-motion";
-
-const recipes = [
-  {
-    id: 1,
-    title: "Classic Serve 🍹",
-    description: "The perfect simple pour",
-    prepTime: "2 min",
-    servings: "1",
-    difficulty: "Easy",
-    gradient: "from-[hsl(var(--primary))] to-[hsl(var(--accent))]",
-    rotation: "-rotate-2",
-    borderColor: "border-[hsl(var(--primary))]",
-  },
-  {
-    id: 2,
-    title: "Frozen Margarita 🧊",
-    description: "Blend with ice, add lime garnish",
-    prepTime: "5 min",
-    servings: "2",
-    difficulty: "Easy",
-    gradient: "from-lime-400 to-green-500",
-    rotation: "rotate-1",
-    borderColor: "border-lime-500",
-  },
-  {
-    id: 3,
-    title: "Ducky Mocktail 🦆",
-    description: "Mix with sparkling water, fruit garnish",
-    prepTime: "3 min",
-    servings: "1",
-    difficulty: "Easy",
-    gradient: "from-yellow-400 to-orange-500",
-    rotation: "-rotate-1",
-    borderColor: "border-yellow-500",
-  },
-  {
-    id: 4,
-    title: "Pool Party Punch 🏊",
-    description: "Large batch recipe perfect for parties",
-    prepTime: "10 min",
-    servings: "8",
-    difficulty: "Medium",
-    gradient: "from-pink-400 to-purple-500",
-    rotation: "rotate-2",
-    borderColor: "border-pink-500",
-  },
-  {
-    id: 5,
-    title: "Spicy Kick 🌶️",
-    description: "Add jalapeño slices, salt rim",
-    prepTime: "4 min",
-    servings: "1",
-    difficulty: "Medium",
-    gradient: "from-red-400 to-orange-600",
-    rotation: "-rotate-2",
-    borderColor: "border-red-500",
-  },
-  {
-    id: 6,
-    title: "Berry Blast 🍓",
-    description: "Muddle fresh berries, top with Strawberry flavor",
-    prepTime: "5 min",
-    servings: "1",
-    difficulty: "Easy",
-    gradient: "from-rose-400 to-red-500",
-    rotation: "rotate-1",
-    borderColor: "border-rose-500",
-  },
-  {
-    id: 7,
-    title: "Tropical Paradise 🌴",
-    description: "Mix with pineapple juice and coconut water",
-    prepTime: "3 min",
-    servings: "2",
-    difficulty: "Easy",
-    gradient: "from-amber-400 to-yellow-500",
-    rotation: "-rotate-1",
-    borderColor: "border-amber-500",
-  },
-  {
-    id: 8,
-    title: "Garden Fresh 🌿",
-    description: "Mint, cucumber, lime - so refreshing!",
-    prepTime: "6 min",
-    servings: "1",
-    difficulty: "Medium",
-    gradient: "from-emerald-400 to-teal-500",
-    rotation: "rotate-2",
-    borderColor: "border-emerald-500",
-  },
-  {
-    id: 9,
-    title: "Sunset Sipper 🌅",
-    description: "Layered fruit juices create a beautiful gradient",
-    prepTime: "7 min",
-    servings: "2",
-    difficulty: "Hard",
-    gradient: "from-orange-400 via-pink-500 to-purple-600",
-    rotation: "-rotate-2",
-    borderColor: "border-orange-500",
-  },
-];
+import { recipes } from "@/data/recipes";
 
 const Recipes = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredRecipes = recipes.filter((recipe) =>
@@ -262,7 +163,11 @@ const Recipes = () => {
                   </div>
 
                   {/* View Button */}
-                  <Button className="w-full" size="lg">
+                  <Button 
+                    className="w-full" 
+                    size="lg"
+                    onClick={() => navigate(`/recipes/${recipe.id}`)}
+                  >
                     VIEW RECIPE 🦆
                   </Button>
                 </div>
