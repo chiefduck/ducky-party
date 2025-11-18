@@ -39,7 +39,14 @@ const StoreLocator = () => {
     )
       .then((res) => res.text())
       .then((csvText) => {
-        const parsed = Papa.parse(csvText, { header: true });
+        const parsed = Papa.parse(csvText, {
+          header: true,
+          skipEmptyLines: true,
+          transformHeader: (header: string, index: number) => {
+            // Make headers unique to prevent duplicate warnings
+            return header.trim() || `column_${index}`;
+          }
+        });
         const mapped: Location[] = parsed.data.map((row: any, index: number) => {
           const lat = parseFloat(String(row.Latitude || "").trim());
           const lng = parseFloat(String(row.Longitude || "").trim());

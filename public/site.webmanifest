@@ -4,12 +4,12 @@
   "description": "The best non-alcoholic margaritas, ready to quack you up!",
   "icons": [
     {
-      "src": "/favicon.png",
+      "src": "/favicon.svg",
       "sizes": "any",
-      "type": "image/png"
+      "type": "image/svg+xml"
     }
   ],
-  "theme_color": "#FF1493",
+  "theme_color": "#FDF221",
   "background_color": "#FFFFFF",
   "display": "standalone",
   "start_url": "/",

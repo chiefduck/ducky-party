@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 
+// TypeScript declarations for Google Maps
+declare global {
+  interface Window {
+    google: typeof google;
+  }
+}
+
 type Location = {
   id: string;
   name: string;
@@ -41,7 +48,7 @@ const GoogleMap = ({ locations }: GoogleMapProps) => {
     };
 
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=${callbackName}`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,marker&callback=${callbackName}&loading=async`;
     script.async = true;
     script.defer = true;
 
@@ -66,11 +73,12 @@ const GoogleMap = ({ locations }: GoogleMapProps) => {
     const map = new window.google.maps.Map(mapRef.current, {
       center: { lat: 39.5501, lng: -105.7821 }, // Colorado center
       zoom: 6,
+      mapId: "DUCKY_MAP", // Required for AdvancedMarkerElement
     });
 
     locations.forEach((location) => {
       if (location.latitude && location.longitude) {
-        const marker = new window.google.maps.Marker({
+        const marker = new google.maps.marker.AdvancedMarkerElement({
           position: { lat: location.latitude, lng: location.longitude },
           map,
           title: location.name,
