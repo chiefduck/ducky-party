@@ -246,7 +246,7 @@ const ProductDetail = () => {
                     >
                       <Badge className="text-lg px-4 py-2 bg-secondary border-2 border-foreground">
                         <Sparkles className="w-4 h-4 mr-2" />
-                        Zero Sugar
+                        Only 80 Cals
                       </Badge>
                     </motion.div>
 
