@@ -9,6 +9,13 @@ import { useCartStore, CartItem } from "@/stores/cartStore";
 import { toast } from "sonner";
 import { fetchProducts, ShopifyProduct } from "@/lib/shopify";
 
+// Colored border rotation: green → blue → pink
+const borderColors = [
+  'border-lime-400',    // Green - 1st product
+  'border-cyan-400',    // Blue - 2nd product
+  'border-primary',     // Pink - 3rd product
+];
+
 export const ProductSection = () => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
@@ -18,10 +25,36 @@ export const ProductSection = () => {
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const fetchedProducts = await fetchProducts(20);
-        setProducts(fetchedProducts);
+        setIsLoading(true);
+        console.log('🦆 [ProductSection] Fetching products for "The Flock"');
+
+        // Get all products (fetch more to have options)
+        const allProducts = await fetchProducts(50);
+        console.log(`📦 Retrieved ${allProducts.length} total products`);
+
+        // Filter by "homepage" tag
+        const taggedProducts = allProducts.filter(product => {
+          const hasTag = product.node.tags && product.node.tags.includes('homepage');
+          if (hasTag) {
+            console.log(`✅ Product "${product.node.title}" has "homepage" tag`);
+          }
+          return hasTag;
+        });
+
+        console.log(`🏷️ Found ${taggedProducts.length} products with "homepage" tag`);
+
+        // Take first 6 tagged products
+        let flockProducts = taggedProducts.slice(0, 6);
+
+        // Fallback: if no tagged products, show first 6 products
+        if (flockProducts.length === 0) {
+          console.log('⚠️ No products with "homepage" tag found, showing first 6 products');
+          flockProducts = allProducts.slice(0, 6);
+        }
+
+        setProducts(flockProducts);
       } catch (error) {
-        console.error('Error fetching products:', error);
+        console.error('❌ Error fetching products:', error);
         toast.error("Failed to load products");
       } finally {
         setIsLoading(false);
@@ -120,7 +153,7 @@ export const ProductSection = () => {
                 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="bg-white p-6 pb-12 shadow-2xl border-secondary border-8 cursor-pointer"
+                className={`bg-white p-6 pb-12 shadow-2xl ${borderColors[i % borderColors.length]} border-8 cursor-pointer rounded-2xl`}
                 style={{
                   boxShadow: "8px 8px 0px rgba(0,0,0,0.2)",
                 }}
@@ -140,7 +173,10 @@ export const ProductSection = () => {
                 <h3 className="text-3xl font-black text-foreground mb-4 text-center">
                   {product.node.title}
                 </h3>
-                
+                <p className="text-center text-sm text-muted-foreground mb-4 px-2 line-clamp-2">
+                  {product.node.description || "A delicious Rubber Ducky beverage!"}
+                </p>
+
                 <p className="text-lg font-semibold text-primary text-center mb-4">
                   {product.node.priceRange.minVariantPrice.currencyCode} {parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)}
                 </p>

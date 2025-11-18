@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Papa from "papaparse";
 import { Search, MapPin, Phone, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,137 +7,106 @@ import { Badge } from "@/components/ui/badge";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SuggestLocationModal } from "@/components/SuggestLocationModal";
+import GoogleMap from "@/components/GoogleMap";
 
-interface Store {
-  id: number;
+type Location = {
+  id: string;
   name: string;
   address: string;
   city: string;
   state: string;
-  zip: string;
+  zipCode: string;
   phone?: string;
-  type: string;
-}
+  hours?: string;
+  type?: string;
+  latitude: number | null;
+  longitude: number | null;
+};
 
-const stores: Store[] = [
-  {
-    id: 1,
-    name: "Whole Foods Market",
-    address: "1234 Market St",
-    city: "Denver",
-    state: "CO",
-    zip: "80202",
-    phone: "(303) 555-0101",
-    type: "Grocery",
-  },
-  {
-    id: 2,
-    name: "Total Wine & More",
-    address: "5678 Cherry Creek Dr",
-    city: "Denver",
-    state: "CO",
-    zip: "80246",
-    phone: "(303) 555-0202",
-    type: "Liquor Store",
-  },
-  {
-    id: 3,
-    name: "Sprouts Farmers Market",
-    address: "9012 Broadway",
-    city: "Boulder",
-    state: "CO",
-    zip: "80302",
-    phone: "(303) 555-0303",
-    type: "Grocery",
-  },
-  {
-    id: 4,
-    name: "King Soopers",
-    address: "3456 Arapahoe Ave",
-    city: "Boulder",
-    state: "CO",
-    zip: "80303",
-    phone: "(303) 555-0404",
-    type: "Grocery",
-  },
-  {
-    id: 5,
-    name: "Target",
-    address: "7890 Colorado Blvd",
-    city: "Denver",
-    state: "CO",
-    zip: "80220",
-    phone: "(303) 555-0505",
-    type: "Retail",
-  },
-  {
-    id: 6,
-    name: "Trader Joe's",
-    address: "2468 Pearl St",
-    city: "Boulder",
-    state: "CO",
-    zip: "80302",
-    phone: "(303) 555-0606",
-    type: "Grocery",
-  },
-  {
-    id: 7,
-    name: "Safeway",
-    address: "1357 Main St",
-    city: "Fort Collins",
-    state: "CO",
-    zip: "80521",
-    phone: "(970) 555-0707",
-    type: "Grocery",
-  },
-  {
-    id: 8,
-    name: "Natural Grocers",
-    address: "8642 College Ave",
-    city: "Fort Collins",
-    state: "CO",
-    zip: "80524",
-    phone: "(970) 555-0808",
-    type: "Grocery",
-  },
-];
-
+// Keep Loveable's styling constants
 const rotations = ["-rotate-2", "rotate-1", "-rotate-1", "rotate-2"];
 const borderColors = ["border-primary", "border-secondary", "border-accent", "border-[hsl(var(--sunshine))]"];
 
 const StoreLocator = () => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredStores, setFilteredStores] = useState(stores);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [locations, setLocations] = useState<Location[]>([]);
   const [isSuggestModalOpen, setIsSuggestModalOpen] = useState(false);
 
-  const handleSearch = () => {
-    if (!searchQuery.trim()) {
-      setFilteredStores(stores);
-      return;
-    }
+  // Fetch real data from Google Sheets
+  useEffect(() => {
+    fetch(
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vQrr85UW34Ge71wwYvg_tYIYmtVoELDjzg7JnH0-Dc0if27qLB2m2JE2xXGtlHq3T9H35XBinXvPmIg/pub?gid=0&single=true&output=csv"
+    )
+      .then((res) => res.text())
+      .then((csvText) => {
+        const parsed = Papa.parse(csvText, { header: true });
+        const mapped: Location[] = parsed.data.map((row: any, index: number) => {
+          const lat = parseFloat(String(row.Latitude || "").trim());
+          const lng = parseFloat(String(row.Longitude || "").trim());
+          return {
+            id: `${index}`,
+            name: row["Store Name"]?.trim() || "Unknown",
+            address: row.Address?.trim() || "",
+            city: row.City?.trim() || "",
+            state: row.State?.trim() || "",
+            zipCode: String(row.Zip || ""),
+            phone: row.Phone?.trim() || "",
+            hours: row.Hours?.trim() || "",
+            type: row.Type?.trim() || "",
+            latitude: !isNaN(lat) ? lat : null,
+            longitude: !isNaN(lng) ? lng : null,
+          };
+        });
+        setLocations(mapped);
+      })
+      .catch((err) => console.error("CSV Fetch error:", err));
+  }, []);
 
-    const query = searchQuery.toLowerCase();
-    const filtered = stores.filter(
-      (store) =>
-        store.city.toLowerCase().includes(query) ||
-        store.state.toLowerCase().includes(query) ||
-        store.zip.includes(query) ||
-        store.name.toLowerCase().includes(query)
+  const filteredLocations = locations.filter((location) => {
+    const matchesSearch =
+      location.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      location.city?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      location.state?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      location.zipCode?.includes(searchTerm);
+
+    return (
+      matchesSearch &&
+      location.latitude !== null &&
+      location.longitude !== null &&
+      !isNaN(location.latitude) &&
+      !isNaN(location.longitude)
     );
-    setFilteredStores(filtered);
+  });
+
+  const handleFindLocationClick = (location: Location) => {
+    console.log("Meta FindLocation Event:", location);
+
+    if (window.fbq && typeof window.fbq === "function") {
+      window.fbq("track", "FindLocation", {
+        store_name: location.name,
+        city: location.city,
+        state: location.state,
+        store_address: location.address,
+        zip_code: location.zipCode,
+        event_source: "Store Locator Page",
+      });
+    }
   };
 
-  const getDirections = (store: Store) => {
-    const address = `${store.address}, ${store.city}, ${store.state} ${store.zip}`;
-    const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-    window.open(url, "_blank");
+  const getDirections = (location: Location) => {
+    const address = `${location.address}, ${location.city}, ${location.state} ${location.zipCode}`;
+    window.open(
+      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`,
+      "_blank"
+    );
+    handleFindLocationClick(location);
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
 
-      {/* Hero Section */}
+      {/* Hero Section - Keep Loveable's style */}
       <section className="rainbow-gradient py-20 px-5 text-center relative overflow-hidden">
         <div className="relative z-10">
           <h1 className="text-5xl md:text-7xl font-black text-foreground mb-4">
@@ -148,7 +118,7 @@ const StoreLocator = () => {
         </div>
       </section>
 
-      {/* Search Section */}
+      {/* Search Section - Keep Loveable's style */}
       <section className="container mx-auto px-5 -mt-10 relative z-20">
         <div className="max-w-2xl mx-auto">
           <div className="flex gap-3">
@@ -157,19 +127,11 @@ const StoreLocator = () => {
               <Input
                 type="text"
                 placeholder="Enter City, State or Zip Code"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-16 pl-16 pr-6 text-lg rounded-full border-4 border-foreground bg-card shadow-lg font-bold"
               />
             </div>
-            <Button
-              onClick={handleSearch}
-              size="lg"
-              className="h-16 px-8 rounded-full border-4 border-foreground font-black text-lg shadow-lg"
-            >
-              SEARCH 🔍
-            </Button>
           </div>
         </div>
       </section>
@@ -178,8 +140,24 @@ const StoreLocator = () => {
       <section className="container mx-auto px-5 py-16">
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Left Column - Store List */}
-          <div className="space-y-6 max-h-[600px] overflow-y-auto pr-4">
-            {filteredStores.length === 0 ? (
+          <div className="relative">
+            {/* Scroll hint for mobile */}
+            {filteredLocations.length > 2 && (
+              <div className="mb-3 text-center lg:hidden">
+                <p className="text-sm font-bold text-muted-foreground animate-bounce">
+                  ↓ Scroll for more locations ↓
+                </p>
+              </div>
+            )}
+
+            {/* Top gradient fade */}
+            {filteredLocations.length > 0 && (
+              <div className="absolute top-0 left-0 right-4 h-8 bg-gradient-to-b from-background to-transparent pointer-events-none z-10 rounded-t-2xl" />
+            )}
+
+            {/* Scrollable store list */}
+            <div className="space-y-6 max-h-[600px] overflow-y-auto pr-4 scroll-smooth [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-muted [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:bg-primary [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-background">
+            {filteredLocations.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-2xl font-bold text-muted-foreground">
                   No stores found 😢
@@ -189,37 +167,42 @@ const StoreLocator = () => {
                 </p>
               </div>
             ) : (
-              filteredStores.map((store, index) => (
+              filteredLocations.map((location, index) => (
                 <div
-                  key={store.id}
+                  key={location.id}
                   className={`bg-card p-6 border-4 ${borderColors[index % borderColors.length]} ${
                     rotations[index % rotations.length]
                   } hover:rotate-0 hover:scale-105 transition-all duration-300 rounded-2xl shadow-lg`}
                 >
                   <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-2xl font-black text-foreground">{store.name}</h3>
-                    <Badge variant="secondary" className="font-bold border-2 border-foreground">
-                      {store.type}
-                    </Badge>
+                    <h3 className="text-2xl font-black text-foreground">{location.name}</h3>
+                    {location.type && (
+                      <Badge variant="secondary" className="font-bold border-2 border-foreground">
+                        {location.type}
+                      </Badge>
+                    )}
                   </div>
                   <div className="space-y-2 mb-4">
                     <div className="flex items-start gap-2">
                       <MapPin className="h-5 w-5 text-primary flex-shrink-0 mt-1" />
                       <p className="text-foreground font-semibold">
-                        {store.address}
+                        {location.address}
                         <br />
-                        {store.city}, {store.state} {store.zip}
+                        {location.city}, {location.state} {location.zipCode}
                       </p>
                     </div>
-                    {store.phone && (
+                    {location.phone && (
                       <div className="flex items-center gap-2">
                         <Phone className="h-5 w-5 text-secondary" />
-                        <p className="text-foreground font-semibold">{store.phone}</p>
+                        <p className="text-foreground font-semibold">{location.phone}</p>
                       </div>
+                    )}
+                    {location.hours && (
+                      <p className="text-sm text-muted-foreground mt-1">{location.hours}</p>
                     )}
                   </div>
                   <Button
-                    onClick={() => getDirections(store)}
+                    onClick={() => getDirections(location)}
                     variant="outline"
                     className="w-full border-2 border-foreground font-black hover:bg-primary hover:text-primary-foreground"
                   >
@@ -229,26 +212,24 @@ const StoreLocator = () => {
                 </div>
               ))
             )}
+            </div>
+
+            {/* Bottom gradient fade */}
+            {filteredLocations.length > 0 && (
+              <div className="absolute bottom-0 left-0 right-4 h-16 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none rounded-b-2xl" />
+            )}
           </div>
 
-          {/* Right Column - Map Placeholder */}
+          {/* Right Column - REAL Google Map */}
           <div className="lg:sticky lg:top-24 h-[600px]">
-            <div className="h-full rounded-2xl border-4 border-foreground bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 flex items-center justify-center shadow-lg">
-              <div className="text-center p-8">
-                <div className="text-8xl mb-4">🗺️</div>
-                <p className="text-3xl font-black text-foreground">
-                  Map Integration
-                </p>
-                <p className="text-xl font-bold text-muted-foreground mt-2">
-                  Coming Soon!
-                </p>
-              </div>
+            <div className="h-full rounded-2xl border-4 border-foreground overflow-hidden shadow-lg">
+              <GoogleMap locations={filteredLocations} />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Bottom CTA */}
+      {/* Bottom CTA - Keep Loveable's style */}
       <section className="container mx-auto px-5 py-16 text-center">
         <div className="max-w-2xl mx-auto space-y-6">
           <p className="text-2xl font-bold text-foreground">
@@ -277,9 +258,9 @@ const StoreLocator = () => {
         </div>
       </section>
 
-      <SuggestLocationModal 
-        open={isSuggestModalOpen} 
-        onOpenChange={setIsSuggestModalOpen} 
+      <SuggestLocationModal
+        open={isSuggestModalOpen}
+        onOpenChange={setIsSuggestModalOpen}
       />
 
       <Footer />

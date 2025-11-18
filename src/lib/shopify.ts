@@ -1,8 +1,11 @@
 // Shopify Storefront API Configuration
-export const SHOPIFY_API_VERSION = '2025-07';
-export const SHOPIFY_STORE_PERMANENT_DOMAIN = 'ducky-party-splash-v7hnb.myshopify.com';
-export const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_STORE_PERMANENT_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
-export const SHOPIFY_STOREFRONT_TOKEN = 'cf4ff031e0d666339293ffe776554530';
+// Use environment variables for real store credentials
+const SHOPIFY_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN || 'duckydrinks.myshopify.com';
+const SHOPIFY_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || '';
+export const SHOPIFY_API_VERSION = '2024-10';
+export const SHOPIFY_STORE_PERMANENT_DOMAIN = SHOPIFY_DOMAIN; // For compatibility with existing code
+export const SHOPIFY_STOREFRONT_URL = `https://${SHOPIFY_DOMAIN}/api/${SHOPIFY_API_VERSION}/graphql.json`;
+export const SHOPIFY_STOREFRONT_TOKEN = SHOPIFY_TOKEN;
 
 export interface ShopifyProduct {
   node: {
@@ -10,6 +13,8 @@ export interface ShopifyProduct {
     title: string;
     description: string;
     handle: string;
+    productType: string;
+    tags: string[];
     priceRange: {
       minVariantPrice: {
         amount: string;
@@ -57,6 +62,8 @@ const STOREFRONT_QUERY = `
           title
           description
           handle
+          productType
+          tags
           priceRange {
             minVariantPrice {
               amount
@@ -131,4 +138,90 @@ export async function storefrontApiRequest(query: string, variables: any = {}) {
 export async function fetchProducts(first: number = 20): Promise<ShopifyProduct[]> {
   const data = await storefrontApiRequest(STOREFRONT_QUERY, { first });
   return data.data.products.edges;
+}
+
+const COLLECTION_QUERY = `
+  query GetCollection($handle: String!, $numProducts: Int!) {
+    collection(handle: $handle) {
+      title
+      description
+      products(first: $numProducts) {
+        edges {
+          node {
+            id
+            title
+            description
+            handle
+            productType
+            tags
+            priceRange {
+              minVariantPrice {
+                amount
+                currencyCode
+              }
+            }
+            images(first: 1) {
+              edges {
+                node {
+                  url
+                  altText
+                }
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  availableForSale
+                  selectedOptions {
+                    name
+                    value
+                  }
+                }
+              }
+            }
+            options {
+              name
+              values
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export async function getCollectionProducts(collectionHandle: string, numberOfProducts: number = 6): Promise<ShopifyProduct[]> {
+  try {
+    console.log(`[Shopify API] Querying collection with handle: "${collectionHandle}"`);
+
+    const data = await storefrontApiRequest(COLLECTION_QUERY, {
+      handle: collectionHandle,
+      numProducts: numberOfProducts
+    });
+
+    console.log(`[Shopify API] Response:`, {
+      collectionFound: !!data.data.collection,
+      collectionTitle: data.data.collection?.title,
+      productCount: data.data.collection?.products.edges.length || 0
+    });
+
+    if (!data.data.collection) {
+      console.warn(`❌ Collection "${collectionHandle}" not found in Shopify`);
+      return [];
+    }
+
+    const products = data.data.collection.products.edges;
+    console.log(`✅ Found ${products.length} products in collection "${collectionHandle}"`);
+
+    return products;
+  } catch (error) {
+    console.error(`❌ Error fetching collection "${collectionHandle}":`, error);
+    return [];
+  }
 }

@@ -45,7 +45,7 @@ export default function BlogDetail() {
             {article.category}
           </Badge>
           
-          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black mb-4 md:mb-6 text-foreground leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 md:mb-6 text-foreground leading-tight">
             {article.title}
           </h1>
 
@@ -83,21 +83,21 @@ export default function BlogDetail() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="prose prose-sm md:prose-lg max-w-none"
+            className="prose prose-lg max-w-3xl mx-auto"
           >
-            <div 
-              className="text-foreground space-y-4 md:space-y-6 font-bold text-base md:text-lg leading-relaxed"
-              dangerouslySetInnerHTML={{ 
+            <div
+              className="text-foreground space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed"
+              dangerouslySetInnerHTML={{
                 __html: article.content
-                  .replace(/^# /gm, '<h1 class="text-3xl md:text-4xl lg:text-5xl font-black mb-4 md:mb-6 mt-8 md:mt-12 text-foreground">')
-                  .replace(/\n# /g, '</h1>\n<h1 class="text-3xl md:text-4xl lg:text-5xl font-black mb-4 md:mb-6 mt-8 md:mt-12 text-foreground">')
-                  .replace(/^## /gm, '<h2 class="text-2xl md:text-3xl lg:text-4xl font-black mb-3 md:mb-4 mt-6 md:mt-8 text-foreground">')
-                  .replace(/\n## /g, '</h2>\n<h2 class="text-2xl md:text-3xl lg:text-4xl font-black mb-3 md:mb-4 mt-6 md:mt-8 text-foreground">')
-                  .replace(/^### /gm, '<h3 class="text-xl md:text-2xl lg:text-3xl font-black mb-2 md:mb-3 mt-4 md:mt-6 text-primary">')
-                  .replace(/\n### /g, '</h3>\n<h3 class="text-xl md:text-2xl lg:text-3xl font-black mb-2 md:mb-3 mt-4 md:mt-6 text-primary">')
-                  .replace(/\*\*(.+?)\*\*/g, '<strong class="text-primary">$1</strong>')
-                  .replace(/\n\n/g, '</p><p class="mb-3 md:mb-4">')
-                  .replace(/^(?!<[h|p])/gm, '<p class="mb-3 md:mb-4">')
+                  .replace(/^# /gm, '<h1 class="text-2xl md:text-3xl lg:text-4xl font-black mb-4 md:mb-6 mt-8 md:mt-10 text-foreground leading-tight">')
+                  .replace(/\n# /g, '</h1>\n<h1 class="text-2xl md:text-3xl lg:text-4xl font-black mb-4 md:mb-6 mt-8 md:mt-10 text-foreground leading-tight">')
+                  .replace(/^## /gm, '<h2 class="text-xl md:text-2xl lg:text-3xl font-black mb-3 md:mb-4 mt-6 md:mt-8 text-foreground leading-tight">')
+                  .replace(/\n## /g, '</h2>\n<h2 class="text-xl md:text-2xl lg:text-3xl font-black mb-3 md:mb-4 mt-6 md:mt-8 text-foreground leading-tight">')
+                  .replace(/^### /gm, '<h3 class="text-lg md:text-xl lg:text-2xl font-black mb-2 md:mb-3 mt-4 md:mt-6 text-primary leading-tight">')
+                  .replace(/\n### /g, '</h3>\n<h3 class="text-lg md:text-xl lg:text-2xl font-black mb-2 md:mb-3 mt-4 md:mt-6 text-primary leading-tight">')
+                  .replace(/\*\*(.+?)\*\*/g, '<strong class="text-primary font-bold">$1</strong>')
+                  .replace(/\n\n/g, '</p><p class="mb-4 leading-relaxed">')
+                  .replace(/^(?!<[h|p])/gm, '<p class="mb-4 leading-relaxed">')
                   .replace(/(?<!>)$/gm, '</p>')
               }}
             />

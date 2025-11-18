@@ -284,9 +284,34 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              <p className="text-xl text-muted-foreground leading-relaxed">
-                {product.node.description || "A refreshing non-alcoholic beverage from Rubber Ducky Drink Co!"}
-              </p>
+              {/* Description Section */}
+              <div className="space-y-4">
+                <h3 className="text-2xl font-black text-foreground">Description</h3>
+                <div className="prose prose-lg max-w-none">
+                  {product.node.description ? (
+                    // Split by double newlines first for proper paragraphs, then single newlines
+                    product.node.description
+                      .split(/\n\n+/)
+                      .map((paragraph, pIndex) => (
+                        paragraph.trim() && (
+                          <div key={pIndex} className="mb-6">
+                            {paragraph.split('\n').map((line, lIndex) => (
+                              line.trim() && (
+                                <p key={lIndex} className="text-base md:text-lg text-muted-foreground leading-relaxed mb-2">
+                                  {line.trim()}
+                                </p>
+                              )
+                            ))}
+                          </div>
+                        )
+                      ))
+                  ) : (
+                    <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                      A refreshing non-alcoholic beverage from Rubber Ducky Drink Co!
+                    </p>
+                  )}
+                </div>
+              </div>
 
               {/* Trust Badges */}
               <div className="grid grid-cols-3 gap-3 py-4 border-y-2 border-border">
