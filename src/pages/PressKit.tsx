@@ -7,8 +7,8 @@ import logo from "@/assets/logo.svg";
 import productImage from "@/assets/product-classic.png";
 
 export default function PressKit() {
-  const downloadAsset = (assetName: string) => {
-    console.log(`Downloading ${assetName}...`);
+  const downloadAsset = (_assetName: string) => {
+    // TODO: Implement actual download functionality
   };
 
   return (

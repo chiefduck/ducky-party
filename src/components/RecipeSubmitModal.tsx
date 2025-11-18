@@ -57,7 +57,6 @@ export const RecipeSubmitModal = ({ open, onOpenChange }: RecipeSubmitModalProps
 
     // Honeypot check - silently reject bots
     if (honeypot) {
-      console.log('Spam detected - submission blocked');
       return;
     }
 

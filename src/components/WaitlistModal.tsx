@@ -44,7 +44,6 @@ export const WaitlistModal = ({ open, onOpenChange }: WaitlistModalProps) => {
 
     // Honeypot check - silently reject bots
     if (honeypot) {
-      console.log('Spam detected - submission blocked');
       return;
     }
 

@@ -26,29 +26,20 @@ export const ProductSection = () => {
     const loadProducts = async () => {
       try {
         setIsLoading(true);
-        console.log('🦆 [ProductSection] Fetching products for "The Flock"');
 
         // Get all products (fetch more to have options)
         const allProducts = await fetchProducts(50);
-        console.log(`📦 Retrieved ${allProducts.length} total products`);
 
         // Filter by "homepage" tag
         const taggedProducts = allProducts.filter(product => {
-          const hasTag = product.node.tags && product.node.tags.includes('homepage');
-          if (hasTag) {
-            console.log(`✅ Product "${product.node.title}" has "homepage" tag`);
-          }
-          return hasTag;
+          return product.node.tags && product.node.tags.includes('homepage');
         });
-
-        console.log(`🏷️ Found ${taggedProducts.length} products with "homepage" tag`);
 
         // Take first 6 tagged products
         let flockProducts = taggedProducts.slice(0, 6);
 
         // Fallback: if no tagged products, show first 6 products
         if (flockProducts.length === 0) {
-          console.log('⚠️ No products with "homepage" tag found, showing first 6 products');
           flockProducts = allProducts.slice(0, 6);
         }
 

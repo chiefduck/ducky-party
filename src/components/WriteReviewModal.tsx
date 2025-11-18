@@ -66,7 +66,6 @@ export const WriteReviewModal = ({ open, onOpenChange, productTitle }: WriteRevi
 
     // Honeypot check - silently reject bots
     if (honeypot) {
-      console.log('Spam detected - submission blocked');
       return;
     }
 

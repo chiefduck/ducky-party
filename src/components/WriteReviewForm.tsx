@@ -50,7 +50,6 @@ export const WriteReviewForm = ({ productId, productName }: WriteReviewFormProps
 
     // Honeypot check - silently reject bots
     if (honeypot) {
-      console.log('Spam detected - submission blocked');
       return;
     }
 

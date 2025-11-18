@@ -198,30 +198,18 @@ const COLLECTION_QUERY = `
 
 export async function getCollectionProducts(collectionHandle: string, numberOfProducts: number = 6): Promise<ShopifyProduct[]> {
   try {
-    console.log(`[Shopify API] Querying collection with handle: "${collectionHandle}"`);
-
     const data = await storefrontApiRequest(COLLECTION_QUERY, {
       handle: collectionHandle,
       numProducts: numberOfProducts
     });
 
-    console.log(`[Shopify API] Response:`, {
-      collectionFound: !!data.data.collection,
-      collectionTitle: data.data.collection?.title,
-      productCount: data.data.collection?.products.edges.length || 0
-    });
-
     if (!data.data.collection) {
-      console.warn(`❌ Collection "${collectionHandle}" not found in Shopify`);
       return [];
     }
 
-    const products = data.data.collection.products.edges;
-    console.log(`✅ Found ${products.length} products in collection "${collectionHandle}"`);
-
-    return products;
+    return data.data.collection.products.edges;
   } catch (error) {
-    console.error(`❌ Error fetching collection "${collectionHandle}":`, error);
+    console.error(`Error fetching collection "${collectionHandle}":`, error);
     return [];
   }
 }

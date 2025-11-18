@@ -54,7 +54,6 @@ export default function Careers() {
 
     // Honeypot check
     if (honeypot) {
-      console.log('Spam detected - submission blocked');
       return;
     }
 

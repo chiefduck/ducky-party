@@ -79,8 +79,6 @@ const StoreLocator = () => {
   });
 
   const handleFindLocationClick = (location: Location) => {
-    console.log("Meta FindLocation Event:", location);
-
     if (window.fbq && typeof window.fbq === "function") {
       window.fbq("track", "FindLocation", {
         store_name: location.name,

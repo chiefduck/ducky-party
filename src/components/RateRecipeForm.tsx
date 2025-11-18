@@ -42,7 +42,6 @@ export const RateRecipeForm = ({ recipeId, recipeTitle }: RateRecipeFormProps) =
 
     // Honeypot check - silently reject bots
     if (honeypot) {
-      console.log('Spam detected - submission blocked');
       return;
     }
 
