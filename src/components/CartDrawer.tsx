@@ -65,7 +65,6 @@ export const CartDrawer = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="sm:hidden"
               onClick={() => setIsCartOpen(false)}
             >
               <X className="h-5 w-5" />

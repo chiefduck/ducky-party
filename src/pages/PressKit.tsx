@@ -4,7 +4,6 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Download, FileText, Image, Mail } from "lucide-react";
 import logo from "@/assets/logo.svg";
-import productImage from "@/assets/product-classic.png";
 
 export default function PressKit() {
   const downloadAsset = (_assetName: string) => {
@@ -63,7 +62,7 @@ export default function PressKit() {
               <div>
                 <h3 className="text-2xl font-black mb-4 text-primary">About Us</h3>
                 <p className="font-bold text-foreground/70 mb-4">
-                  Rubber Ducky Drink Co. is revolutionizing the non-alcoholic beverage industry with our bold, playful approach to refreshment. Founded in 2023, we create drinks that don't just quench your thirst – they make you smile.
+                  Rubber Ducky Drink Co. is revolutionizing the non-alcoholic beverage industry with our bold, playful approach to refreshment. Founded in 2024, we create drinks that don't just quench your thirst – they make you smile.
                 </p>
                 <p className="font-bold text-foreground/70">
                   Our mission is to bring joy to every sip while maintaining the highest quality ingredients and sustainability standards.
@@ -72,12 +71,11 @@ export default function PressKit() {
               <div>
                 <h3 className="text-2xl font-black mb-4 text-primary">Key Facts</h3>
                 <ul className="space-y-2 font-bold text-foreground/70">
-                  <li>• Founded: 2023</li>
-                  <li>• Headquarters: Portland, Oregon</li>
+                  <li>• Founded: 2024</li>
+                  <li>• Headquarters: Centennial, Colorado</li>
                   <li>• Products: Non-Alcoholic Beverages</li>
                   <li>• Distribution: Nationwide</li>
                   <li>• Sustainability: 100% Recyclable Packaging</li>
-                  <li>• Certifications: Organic, Non-GMO</li>
                 </ul>
               </div>
             </div>
@@ -144,23 +142,19 @@ export default function PressKit() {
           <div className="grid md:grid-cols-3 gap-8">
             {[1, 2, 3].map((item) => (
               <div key={item} className="bg-secondary/10 border-4 border-foreground rounded-3xl p-6">
-                <div className="aspect-square bg-background border-4 border-foreground rounded-2xl mb-4 overflow-hidden">
-                  <img 
-                    src={productImage} 
-                    alt="Product" 
-                    className="w-full h-full object-cover"
-                  />
+                <div className="aspect-square bg-muted border-4 border-foreground rounded-2xl mb-4 overflow-hidden flex items-center justify-center">
+                  <p className="text-2xl font-black text-muted-foreground">Coming Soon</p>
                 </div>
                 <h3 className="text-xl font-black mb-2 text-foreground">Product Shot {item}</h3>
                 <p className="font-bold text-foreground/70 text-sm mb-4">
                   High-resolution product photography
                 </p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full font-bold border-2"
-                  onClick={() => downloadAsset(`product-${item}.jpg`)}
+                  disabled
                 >
-                  <Image className="mr-2 w-4 h-4" /> Download
+                  <Image className="mr-2 w-4 h-4" /> Coming Soon
                 </Button>
               </div>
             ))}
@@ -186,7 +180,7 @@ export default function PressKit() {
                 Email: <a href="mailto:press@rubberducky.com" className="text-primary hover:underline">press@rubberducky.com</a>
               </p>
               <p className="font-bold text-foreground">
-                Phone: (555) 123-4567
+                Phone: (866) 303-4223
               </p>
             </div>
           </div>
