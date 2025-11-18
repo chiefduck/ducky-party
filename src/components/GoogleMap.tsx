@@ -21,7 +21,8 @@ const GoogleMap = ({ locations }: GoogleMapProps) => {
 
   // Load Google Maps script dynamically
   useEffect(() => {
-    if (window.google) {
+    // Check if already loaded
+    if (window.google?.maps) {
       setMapsLoaded(true);
       return;
     }
@@ -32,12 +33,31 @@ const GoogleMap = ({ locations }: GoogleMapProps) => {
       return;
     }
 
+    // Create global callback function
+    const callbackName = `initGoogleMaps_${Date.now()}`;
+    (window as any)[callbackName] = () => {
+      setMapsLoaded(true);
+      delete (window as any)[callbackName];
+    };
+
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=${callbackName}`;
     script.async = true;
     script.defer = true;
-    script.onload = () => setMapsLoaded(true);
+
+    script.onerror = () => {
+      console.error("Failed to load Google Maps");
+      delete (window as any)[callbackName];
+    };
+
     document.head.appendChild(script);
+
+    return () => {
+      // Cleanup callback if component unmounts before load
+      if ((window as any)[callbackName]) {
+        delete (window as any)[callbackName];
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -70,6 +90,14 @@ const GoogleMap = ({ locations }: GoogleMapProps) => {
       }
     });
   }, [locations, mapsLoaded]);
+
+  if (!mapsLoaded) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-muted">
+        <p className="text-lg font-bold text-muted-foreground">Loading map...</p>
+      </div>
+    );
+  }
 
   return <div ref={mapRef} className="w-full h-full" />;
 };
