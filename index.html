@@ -133,19 +133,6 @@
       }
     </script>
 
-    <!-- Google Maps API -->
-    <script>
-      (function() {
-        const apiKey = '%VITE_GOOGLE_MAPS_API_KEY%';
-        if (apiKey && apiKey !== 'your_google_maps_api_key_here') {
-          const script = document.createElement('script');
-          script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-          script.async = true;
-          document.head.appendChild(script);
-        }
-      })();
-    </script>
-
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)

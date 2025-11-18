@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Location = {
   id: string;
@@ -17,9 +17,31 @@ type GoogleMapProps = {
 
 const GoogleMap = ({ locations }: GoogleMapProps) => {
   const mapRef = useRef<HTMLDivElement>(null);
+  const [mapsLoaded, setMapsLoaded] = useState(false);
+
+  // Load Google Maps script dynamically
+  useEffect(() => {
+    if (window.google) {
+      setMapsLoaded(true);
+      return;
+    }
+
+    const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+    if (!apiKey) {
+      console.error("Google Maps API key not found");
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => setMapsLoaded(true);
+    document.head.appendChild(script);
+  }, []);
 
   useEffect(() => {
-    if (!window.google || !mapRef.current) return;
+    if (!mapsLoaded || !window.google || !mapRef.current) return;
 
     const map = new window.google.maps.Map(mapRef.current, {
       center: { lat: 39.5501, lng: -105.7821 }, // Colorado center
@@ -47,7 +69,7 @@ const GoogleMap = ({ locations }: GoogleMapProps) => {
         });
       }
     });
-  }, [locations]);
+  }, [locations, mapsLoaded]);
 
   return <div ref={mapRef} className="w-full h-full" />;
 };
