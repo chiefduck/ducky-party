@@ -18,7 +18,7 @@ const faqCategories = [
     questions: [
       {
         q: "What flavors do you offer?",
-        a: "We currently offer our Classic Lemon-Lime flavor, with exciting new flavors coming soon! Each flavor is crafted with natural ingredients for maximum refreshment. Stay tuned to our social media for flavor drop announcements!"
+        a: "We currently offer our Classic Lime flavor, Watermelon Jalapeno and Strawberry (In select Locations) . Each flavor is crafted with natural ingredients for maximum refreshment. Stay tuned to our social media for flavor drop announcements!"
       },
       {
         q: "Are Rubber Ducky drinks healthy?",
@@ -26,7 +26,7 @@ const faqCategories = [
       },
       {
         q: "Are your drinks caffeinated?",
-        a: "Currently, our Classic Lemon-Lime flavor is caffeine-free, making it perfect for any time of day! We're exploring caffeinated options for future releases based on customer demand."
+        a: "Currently, all our flavors are caffeine-free, making it perfect for any time of day! We're exploring caffeinated options for future releases based on customer demand."
       },
       {
         q: "What's the shelf life of your products?",
@@ -78,7 +78,7 @@ const faqCategories = [
       },
       {
         q: "Do you ship internationally?",
-        a: "We ship to most countries worldwide! International shipping rates and delivery times vary by location. Customs duties and taxes are the responsibility of the buyer. See our Shipping Policy for specific countries and rates."
+        a: "Currently we only ship to the United States and Canada."
       },
       {
         q: "How can I track my order?",
@@ -103,10 +103,6 @@ const faqCategories = [
         a: "Refunds are processed within 5-7 business days after we receive your return. The refund goes back to your original payment method. Note: original shipping fees are non-refundable unless we made an error."
       },
       {
-        q: "Can I exchange for a different flavor?",
-        a: "Absolutely! We offer free exchanges for different flavors. Just contact us at returns@rubberduckydrink.com and we'll arrange the exchange. We'll even cover return shipping!"
-      },
-      {
         q: "What if I received the wrong item?",
         a: "Our bad! Contact us immediately at orders@rubberduckydrink.com with your order number. We'll send the correct item right away and provide a prepaid return label for the wrong item."
       },
@@ -126,7 +122,7 @@ const faqCategories = [
       },
       {
         q: "Can I buy directly from your website?",
-        a: "Yes! You can order directly from our online shop for home delivery. We offer both single purchases and subscription options for regular deliveries."
+        a: "Yes! You can order directly from our online shop for home delivery."
       },
       {
         q: "Do you have a subscription service?",

@@ -59,12 +59,12 @@ const About = () => {
 
             {/* Right - Product Visual */}
             <div className="relative">
-              <div className="bg-gradient-to-br from-primary via-secondary to-accent rounded-3xl border-4 border-foreground shadow-2xl h-96 flex items-center justify-center rotate-[2deg] hover:rotate-0 transition-all duration-300">
-                <div className="text-center">
-                  <p className="text-2xl font-black text-background">
-                    Product Visual
-                  </p>
-                </div>
+              <div className="rounded-3xl border-4 border-foreground shadow-2xl h-96 overflow-hidden rotate-[2deg] hover:rotate-0 transition-all duration-300">
+                <img
+                  src="/images/about/product_visual.jpg"
+                  alt="Rubber Ducky Drinks"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
@@ -104,15 +104,14 @@ const About = () => {
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
             
-            {/* Left - Text */}
+            {/* Left - Crafting Process Image */}
             <div className="order-2 lg:order-1">
-              <div className="bg-gradient-to-br from-primary via-secondary to-accent rounded-3xl border-4 border-foreground shadow-2xl h-96 flex items-center justify-center rotate-[-2deg] hover:rotate-0 transition-all duration-300">
-                <div className="text-center">
-                  <div className="text-8xl mb-4 animate-bounce-float">🥤</div>
-                  <p className="text-2xl font-black text-background">
-                    Crafting Process
-                  </p>
-                </div>
+              <div className="rounded-3xl border-4 border-foreground shadow-2xl h-96 overflow-hidden rotate-[-2deg] hover:rotate-0 transition-all duration-300">
+                <img
+                  src="/images/about/crafting_process.jpg"
+                  alt="Our Crafting Process"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
 

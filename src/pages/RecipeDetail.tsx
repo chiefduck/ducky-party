@@ -54,9 +54,13 @@ const RecipeDetail = () => {
               transition={{ duration: 0.6 }}
             >
               <div
-                className={`w-full aspect-square rounded-2xl bg-gradient-to-br ${recipe.gradient} flex items-center justify-center text-9xl border-4 ${recipe.borderColor} shadow-2xl`}
+                className={`w-full aspect-square rounded-2xl overflow-hidden border-4 ${recipe.borderColor} shadow-2xl`}
               >
-                🍹
+                <img
+                  src={recipe.image}
+                  alt={recipe.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
             </motion.div>
 
@@ -185,7 +189,7 @@ const RecipeDetail = () => {
         </div>
       </section>
 
-      {/* Nutritional Info */}
+      {/* Nutrition Note */}
       <section className="py-12">
         <div className="container mx-auto px-4">
           <motion.div
@@ -195,45 +199,31 @@ const RecipeDetail = () => {
             transition={{ duration: 0.6 }}
             className="max-w-4xl mx-auto"
           >
-            <div className="bg-background rounded-2xl border-4 border-accent p-6 shadow-xl">
-              <h2 className="text-3xl font-black mb-6 text-foreground text-center">
-                Nutritional Information 📊
+            <div className="bg-gray-50 rounded-2xl border-4 border-gray-200 p-6 shadow-xl">
+              <h2 className="text-2xl font-black mb-4 text-foreground text-center">
+                🦆 Made with Rubber Ducky Classic Lime Margarita
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-                <div className="text-center p-4 bg-muted rounded-xl">
-                  <div className="text-3xl font-black text-primary">
-                    {recipe.nutritionalInfo.calories}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Calories</div>
-                </div>
-                <div className="text-center p-4 bg-muted rounded-xl">
-                  <div className="text-3xl font-black text-primary">
-                    {recipe.nutritionalInfo.sugar}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Sugar</div>
-                </div>
-                <div className="text-center p-4 bg-muted rounded-xl">
-                  <div className="text-3xl font-black text-primary">
-                    {recipe.nutritionalInfo.carbs}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Carbs</div>
-                </div>
-                <div className="text-center p-4 bg-muted rounded-xl">
-                  <div className="text-3xl font-black text-primary">
-                    {recipe.nutritionalInfo.protein}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Protein</div>
-                </div>
-                <div className="text-center p-4 bg-muted rounded-xl">
-                  <div className="text-3xl font-black text-primary">
-                    {recipe.nutritionalInfo.sodium}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Sodium</div>
+              <div className="text-center mb-4">
+                <p className="text-lg font-bold text-foreground">
+                  Base Nutrition (per 12oz can):
+                </p>
+                <div className="flex flex-wrap justify-center gap-4 mt-3">
+                  <span className="bg-white px-4 py-2 rounded-lg border-2 border-primary/20 font-bold">
+                    80 calories
+                  </span>
+                  <span className="bg-white px-4 py-2 rounded-lg border-2 border-primary/20 font-bold">
+                    17g sugar
+                  </span>
+                  <span className="bg-white px-4 py-2 rounded-lg border-2 border-primary/20 font-bold">
+                    17g carbs
+                  </span>
+                  <span className="bg-white px-4 py-2 rounded-lg border-2 border-primary/20 font-bold">
+                    120mg sodium
+                  </span>
                 </div>
               </div>
-              <p className="text-center text-sm text-muted-foreground mt-6">
-                * Per serving. Values are approximate and may vary based on
-                specific ingredients used.
+              <p className="text-center text-sm text-muted-foreground">
+                Additional nutrition will vary based on other ingredients added to this recipe.
               </p>
             </div>
           </motion.div>

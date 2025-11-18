@@ -3,73 +3,12 @@ import { motion } from "framer-motion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, DollarSign, Users, Heart, Zap, Coffee } from "lucide-react";
-import { ApplyJobModal } from "@/components/ApplyJobModal";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Clock, DollarSign, Users, Heart, Zap, Coffee, Mail, Loader2 } from "lucide-react";
+import { submitToMake } from "@/lib/formSubmit";
+import { toast } from "sonner";
 
-const positions = [
-  {
-    id: 1,
-    title: "Senior Flavor Scientist",
-    department: "Product Development",
-    location: "Portland, OR",
-    type: "Full-time",
-    salary: "$90k - $120k",
-    description: "Lead our flavor innovation team to create the next generation of non-alcoholic beverages. You'll experiment with natural ingredients and push the boundaries of taste.",
-    requirements: [
-      "5+ years experience in food science or flavor development",
-      "Deep knowledge of natural flavoring and beverage formulation",
-      "Experience with regulatory compliance (FDA, organic certifications)",
-      "Passion for creating innovative products"
-    ]
-  },
-  {
-    id: 2,
-    title: "Marketing Manager",
-    department: "Marketing",
-    location: "Remote (US)",
-    type: "Full-time",
-    salary: "$80k - $100k",
-    description: "Drive our brand strategy and lead campaigns that make people smile. You'll own our social media presence, influencer partnerships, and brand positioning.",
-    requirements: [
-      "3+ years experience in consumer brand marketing",
-      "Strong social media and content creation skills",
-      "Experience with DTC brands preferred",
-      "Creative mindset with data-driven approach"
-    ]
-  },
-  {
-    id: 3,
-    title: "Sales Representative",
-    department: "Sales",
-    location: "Multiple Locations",
-    type: "Full-time",
-    salary: "$60k - $80k + Commission",
-    description: "Build relationships with retailers and expand our distribution network. You'll be the face of Rubber Ducky in your region.",
-    requirements: [
-      "2+ years experience in CPG or beverage sales",
-      "Existing retail relationships preferred",
-      "Strong negotiation and presentation skills",
-      "Self-motivated and results-driven"
-    ]
-  },
-  {
-    id: 4,
-    title: "Production Coordinator",
-    department: "Operations",
-    location: "Portland, OR",
-    type: "Full-time",
-    salary: "$55k - $70k",
-    description: "Ensure our production runs smoothly and efficiently. You'll coordinate with manufacturers, manage inventory, and maintain quality standards.",
-    requirements: [
-      "2+ years in production or operations",
-      "Experience with beverage manufacturing preferred",
-      "Strong organizational and communication skills",
-      "Detail-oriented problem solver"
-    ]
-  }
-];
 
 const benefits = [
   {
@@ -105,12 +44,49 @@ const benefits = [
 ];
 
 export default function Careers() {
-  const [selectedPosition, setSelectedPosition] = useState<typeof positions[0] | null>(null);
-  const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [honeypot, setHoneypot] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
-  const handleApplyClick = (position: typeof positions[0]) => {
-    setSelectedPosition(position);
-    setIsApplyModalOpen(true);
+  const handleNotifySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Honeypot check
+    if (honeypot) {
+      console.log('Spam detected - submission blocked');
+      return;
+    }
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const result = await submitToMake('career-notify', {
+        email,
+        timestamp: new Date().toISOString()
+      });
+
+      if (result.success) {
+        setSubmitted(true);
+        setEmail("");
+        toast.success("You're on the list!");
+
+        // Reset after 5 seconds
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        toast.error("Oops! Something went wrong. Please try again.");
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast.error("Oops! Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -201,72 +177,76 @@ export default function Careers() {
           <h2 className="text-4xl font-black mb-12 text-center text-foreground">
             Open Positions
           </h2>
-          <div className="space-y-6 max-w-5xl mx-auto">
-            {positions.map((position, index) => (
-              <motion.div
-                key={position.id}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="border-4 border-foreground hover:shadow-xl transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-2xl font-black mb-2">
-                          {position.title}
-                        </CardTitle>
-                        <CardDescription className="text-lg font-bold">
-                          {position.department}
-                        </CardDescription>
-                      </div>
-                      <Badge className="text-sm font-bold">
-                        {position.type}
-                      </Badge>
+          <div className="max-w-2xl mx-auto">
+            <Card className="border-4 border-foreground shadow-xl">
+              <CardContent className="p-8 md:p-12 text-center">
+                <div className="text-6xl mb-6">🦆</div>
+                <h3 className="text-2xl md:text-3xl font-black mb-4 text-foreground">
+                  No Current Openings
+                </h3>
+                <p className="text-lg text-muted-foreground mb-6">
+                  We're not hiring right now, but we're always looking for amazing people!
+                  Brand Ambassador positions may be opening soon.
+                </p>
+                <p className="text-base font-bold text-foreground mb-6">
+                  Want to be notified when we have openings?
+                </p>
+
+                {!submitted ? (
+                  <form onSubmit={handleNotifySubmit} className="space-y-4">
+                    {/* Honeypot */}
+                    <input
+                      type="text"
+                      name="website"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                      className="absolute left-[-9999px]"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                    />
+
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Input
+                        type="email"
+                        placeholder="your@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="flex-1 border-2 text-base h-12"
+                        required
+                      />
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="font-black text-base h-12 px-6"
+                      >
+                        {isSubmitting ? (
+                          <span className="flex items-center gap-2">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Sending...
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-2">
+                            <Mail className="w-4 h-4" />
+                            Notify Me
+                          </span>
+                        )}
+                      </Button>
                     </div>
-                    
-                    <div className="flex flex-wrap gap-4 mt-4 text-sm font-bold text-muted-foreground">
-                      <span className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4" />
-                        {position.location}
-                      </span>
-                      <span className="flex items-center gap-2">
-                        <DollarSign className="w-4 h-4" />
-                        {position.salary}
-                      </span>
-                    </div>
-                  </CardHeader>
-                  
-                  <CardContent>
-                    <p className="text-foreground/80 mb-4">
-                      {position.description}
+                  </form>
+                ) : (
+                  <div className="bg-green-50 border-4 border-green-400 rounded-xl p-6">
+                    <p className="text-4xl mb-2">🎉</p>
+                    <p className="font-bold text-green-800 text-lg">
+                      You're on the list!
                     </p>
-                    
-                    <div>
-                      <h4 className="font-black mb-2">Requirements:</h4>
-                      <ul className="space-y-1 text-sm text-foreground/70">
-                        {position.requirements.map((req, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <span className="text-primary mt-1">•</span>
-                            <span>{req}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </CardContent>
-                  
-                  <CardFooter>
-                    <Button 
-                      className="w-full font-black text-lg"
-                      onClick={() => handleApplyClick(position)}
-                    >
-                      Apply Now
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
-            ))}
+                    <p className="text-green-700">
+                      We'll let you know when positions open up! 🦆
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </motion.section>
 
@@ -278,29 +258,21 @@ export default function Careers() {
           className="mt-20 bg-gradient-to-br from-primary via-accent to-secondary rounded-3xl border-4 border-foreground p-12 text-center"
         >
           <h2 className="text-4xl font-black mb-4 text-primary-foreground">
-            Don't See Your Perfect Role?
+            Have Questions?
           </h2>
           <p className="text-xl text-primary-foreground/90 mb-6 max-w-2xl mx-auto">
-            We're always looking for talented people. Send us your resume and let us know what makes you special!
+            Curious about working at Rubber Ducky? Send us an email and let's chat!
           </p>
-          <Button 
+          <Button
             variant="secondary"
             size="lg"
             className="font-black text-lg"
-            onClick={() => window.open('mailto:careers@rubberduckydrink.com?subject=General Application', '_blank')}
+            onClick={() => window.open('mailto:careers@rubberduckydrinkco.com?subject=Career Inquiry', '_blank')}
           >
-            Send Us Your Resume
+            Email Us
           </Button>
         </motion.section>
       </main>
-
-      {selectedPosition && (
-        <ApplyJobModal
-          open={isApplyModalOpen}
-          onOpenChange={setIsApplyModalOpen}
-          position={selectedPosition}
-        />
-      )}
 
       <Footer />
     </div>

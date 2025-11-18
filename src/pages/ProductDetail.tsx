@@ -33,6 +33,7 @@ const ProductDetail = () => {
   const { handle } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState<ShopifyProduct | null>(null);
+  const [allProducts, setAllProducts] = useState<ShopifyProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
@@ -46,6 +47,7 @@ const ProductDetail = () => {
     const loadProduct = async () => {
       try {
         const products = await fetchProducts(100);
+        setAllProducts(products);
         const foundProduct = products.find(p => p.node.handle === handle);
         setProduct(foundProduct || null);
       } catch (error) {
@@ -137,6 +139,16 @@ const ProductDetail = () => {
 
   const selectedVariant = product.node.variants.edges[selectedVariantIndex].node;
 
+  // Check if product is a drink based on tags
+  const productTags = product.node.tags?.map(t => t.toLowerCase()) || [];
+  const isDrink = productTags.includes('drinks');
+
+  // Get drink products for "Customers also bought" section
+  const drinkProducts = allProducts.filter(p =>
+    p.node.tags?.some(t => t.toLowerCase() === 'drinks') &&
+    p.node.handle !== handle
+  ).slice(0, 4);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -223,30 +235,34 @@ const ProductDetail = () => {
                   </div>
                 )}
                 
-                {/* Floating badges */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 }}
-                  className="absolute top-4 left-4"
-                >
-                  <Badge className="text-lg px-4 py-2 bg-secondary border-2 border-foreground">
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    Zero Sugar
-                  </Badge>
-                </motion.div>
-                
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 }}
-                  className="absolute top-4 right-4"
-                >
-                  <Badge className="text-lg px-4 py-2 bg-primary border-2 border-foreground">
-                    <Leaf className="w-4 h-4 mr-2" />
-                    All Natural
-                  </Badge>
-                </motion.div>
+                {/* Floating badges - Only show for drinks */}
+                {isDrink && (
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="absolute top-4 left-4"
+                    >
+                      <Badge className="text-lg px-4 py-2 bg-secondary border-2 border-foreground">
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        Zero Sugar
+                      </Badge>
+                    </motion.div>
+
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.6 }}
+                      className="absolute top-4 right-4"
+                    >
+                      <Badge className="text-lg px-4 py-2 bg-primary border-2 border-foreground">
+                        <Leaf className="w-4 h-4 mr-2" />
+                        All Natural
+                      </Badge>
+                    </motion.div>
+                  </>
+                )}
               </div>
               
               {/* Action Buttons */}
@@ -286,51 +302,102 @@ const ProductDetail = () => {
 
               {/* Description Section */}
               <div className="space-y-4">
-                <h3 className="text-2xl font-black text-foreground">Description</h3>
-                <div className="prose prose-lg max-w-none">
-                  {product.node.description ? (
-                    // Split by double newlines first for proper paragraphs, then single newlines
-                    product.node.description
-                      .split(/\n\n+/)
-                      .map((paragraph, pIndex) => (
-                        paragraph.trim() && (
-                          <div key={pIndex} className="mb-6">
-                            {paragraph.split('\n').map((line, lIndex) => (
-                              line.trim() && (
-                                <p key={lIndex} className="text-base md:text-lg text-muted-foreground leading-relaxed mb-2">
-                                  {line.trim()}
-                                </p>
-                              )
-                            ))}
-                          </div>
-                        )
-                      ))
-                  ) : (
-                    <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-                      A refreshing non-alcoholic beverage from Rubber Ducky Drink Co!
-                    </p>
+                <h3 className="text-2xl font-black text-foreground">
+                  {isDrink ? "About This Drink 🦆" : "Product Details"}
+                </h3>
+                <div className="bg-card rounded-xl border-2 border-primary/20 p-6">
+                  <div className="prose prose-lg max-w-none">
+                    {product.node.description ? (
+                      // Split by double newlines first for proper paragraphs, then single newlines
+                      product.node.description
+                        .split(/\n\n+/)
+                        .map((paragraph, pIndex) => (
+                          paragraph.trim() && (
+                            <div key={pIndex} className="mb-4 last:mb-0">
+                              {paragraph.split('\n').map((line, lIndex) => (
+                                line.trim() && (
+                                  <p key={lIndex} className="text-base md:text-lg text-muted-foreground leading-relaxed mb-2 last:mb-0">
+                                    {line.trim()}
+                                  </p>
+                                )
+                              ))}
+                            </div>
+                          )
+                        ))
+                    ) : (
+                      <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                        {isDrink
+                          ? "A refreshing non-alcoholic beverage from Rubber Ducky Drink Co!"
+                          : "Official Rubber Ducky Drink Co. merchandise. Show off your love for the flock!"}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Quick Facts Box - Only for drinks */}
+                  {isDrink && (
+                    <div className="bg-yellow-50 rounded-lg border-2 border-yellow-200 p-4 mt-6">
+                      <h4 className="text-lg font-black mb-3">Quick Facts:</h4>
+                      <ul className="space-y-2 text-muted-foreground">
+                        <li className="flex items-start">
+                          <span className="text-green-500 mr-2 text-lg">✓</span>
+                          <span>Only 80 calories per can</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 mr-2 text-lg">✓</span>
+                          <span>Zero added sugars - just 17g natural sugars</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 mr-2 text-lg">✓</span>
+                          <span>0% ABV - Non-alcoholic</span>
+                        </li>
+                        <li className="flex items-start">
+                          <span className="text-green-500 mr-2 text-lg">✓</span>
+                          <span>Made with real lime juice & natural agave</span>
+                        </li>
+                      </ul>
+                    </div>
                   )}
                 </div>
               </div>
 
-              {/* Trust Badges */}
-              <div className="grid grid-cols-3 gap-3 py-4 border-y-2 border-border">
-                <div className="text-center">
-                  <Truck className="w-6 h-6 mx-auto mb-1 text-primary" />
-                  <p className="text-xs font-bold">Free Shipping</p>
-                  <p className="text-xs text-muted-foreground">Orders $50+</p>
+              {/* Value Props - Different for drinks vs other products */}
+              {isDrink ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
+                  <div className="text-center p-4 bg-gradient-to-br from-green-50 to-lime-50 rounded-xl border-2 border-green-200">
+                    <div className="text-3xl mb-2">🦆</div>
+                    <p className="text-sm font-black">Zero Hangover</p>
+                    <p className="text-xs text-muted-foreground">All the flavor, none of the regrets</p>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border-2 border-green-200">
+                    <div className="text-3xl mb-2">🌿</div>
+                    <p className="text-sm font-black">Real Ingredients</p>
+                    <p className="text-xs text-muted-foreground">Fresh lime juice & natural agave</p>
+                  </div>
+                  <div className="text-center p-4 bg-gradient-to-br from-pink-50 to-rose-50 rounded-xl border-2 border-pink-200">
+                    <div className="text-3xl mb-2">🎉</div>
+                    <p className="text-sm font-black">Everyone's Invited</p>
+                    <p className="text-xs text-muted-foreground">0% ABV, 100% fun for all</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <Shield className="w-6 h-6 mx-auto mb-1 text-primary" />
-                  <p className="text-xs font-bold">Secure</p>
-                  <p className="text-xs text-muted-foreground">100% Safe</p>
+              ) : (
+                <div className="grid grid-cols-3 gap-3 py-4 border-y-2 border-border">
+                  <div className="text-center">
+                    <Truck className="w-6 h-6 mx-auto mb-1 text-primary" />
+                    <p className="text-xs font-bold">Free Shipping</p>
+                    <p className="text-xs text-muted-foreground">Orders $50+</p>
+                  </div>
+                  <div className="text-center">
+                    <Shield className="w-6 h-6 mx-auto mb-1 text-primary" />
+                    <p className="text-xs font-bold">Secure</p>
+                    <p className="text-xs text-muted-foreground">100% Safe</p>
+                  </div>
+                  <div className="text-center">
+                    <RefreshCw className="w-6 h-6 mx-auto mb-1 text-primary" />
+                    <p className="text-xs font-bold">Easy Returns</p>
+                    <p className="text-xs text-muted-foreground">30 Days</p>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <RefreshCw className="w-6 h-6 mx-auto mb-1 text-primary" />
-                  <p className="text-xs font-bold">Easy Returns</p>
-                  <p className="text-xs text-muted-foreground">30 Days</p>
-                </div>
-              </div>
+              )}
 
               {/* Variant Selection */}
               {product.node.variants.edges.length > 1 && (
@@ -409,201 +476,206 @@ const ProductDetail = () => {
         </div>
       </section>
 
-      {/* Features & Benefits */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-4xl md:text-5xl font-black text-center mb-12">
-              WHY YOU'LL LOVE IT
-            </h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  icon: <Sparkles className="w-8 h-8" />,
-                  title: "Zero Sugar",
-                  description: "All the flavor, none of the guilt. Sweetened naturally!",
-                  color: "from-yellow-400 to-orange-500"
-                },
-                {
-                  icon: <Leaf className="w-8 h-8" />,
-                  title: "Natural Ingredients",
-                  description: "Real fruit extracts and natural flavors only.",
-                  color: "from-green-400 to-emerald-500"
-                },
-                {
-                  icon: <Droplets className="w-8 h-8" />,
-                  title: "Ultra Refreshing",
-                  description: "Perfectly carbonated for maximum refreshment.",
-                  color: "from-blue-400 to-cyan-500"
-                },
-                {
-                  icon: <Award className="w-8 h-8" />,
-                  title: "Award Winning",
-                  description: "Loved by mocktail enthusiasts everywhere!",
-                  color: "from-pink-400 to-rose-500"
-                }
-              ].map((feature, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
-                  className="bg-card border-4 border-foreground rounded-xl p-6 shadow-lg"
-                >
-                  <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 text-white`}>
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-xl font-black mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Features & Benefits - Only for drinks */}
+      {isDrink && (
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-4xl md:text-5xl font-black text-center mb-12">
+                WHY YOU'LL LOVE IT
+              </h2>
 
-      {/* Product Details Section */}
-      <section className="py-16 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-4xl mx-auto"
-          >
-            <h2 className="text-3xl md:text-4xl font-black text-center mb-8">
-              PRODUCT DETAILS
-            </h2>
-            <Accordion type="single" collapsible defaultValue="description" className="w-full">
-              <AccordionItem value="description" className="border-4 border-foreground rounded-xl mb-4 overflow-hidden bg-background">
-                <AccordionTrigger className="px-6 py-4 hover:no-underline font-black text-lg md:text-xl hover:bg-muted/50">
-                  📝 DESCRIPTION
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-6">
-                  <div className="space-y-4 text-muted-foreground leading-relaxed">
-                    <p>
-                      Get ready to party without the hangover! Our non-alcoholic margarita is the perfect blend of zesty lime, 
-                      natural sweetness, and that signature margarita tang you love - minus the tequila.
-                    </p>
-                    <p>
-                      Made with premium ingredients and zero sugar, this refreshing beverage delivers all the flavor and fun 
-                      of a classic margarita in a convenient ready-to-drink format. Whether you're the designated driver, 
-                      pregnant, health-conscious, or just taking a break from alcohol, you don't have to miss out on the celebration!
-                    </p>
-                    <p className="font-bold text-foreground">
-                      Perfect for: Pool parties, game nights, celebrations, or any time you want a refreshing treat!
-                    </p>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              
-              <AccordionItem value="ingredients" className="border-4 border-foreground rounded-xl mb-4 overflow-hidden bg-background">
-                <AccordionTrigger className="px-6 py-4 hover:no-underline font-black text-lg md:text-xl hover:bg-muted/50">
-                  🌿 INGREDIENTS
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-6">
-                  <div className="space-y-4">
-                    <p className="text-muted-foreground">
-                      We believe in keeping it real! Our drinks are made with simple, natural ingredients you can feel good about:
-                    </p>
-                    <ul className="space-y-3 text-muted-foreground">
-                      <li className="flex items-start gap-3">
-                        <span className="text-primary text-2xl">•</span>
-                        <span>Carbonated Water</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-primary text-2xl">•</span>
-                        <span>Natural Lime Flavor</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-primary text-2xl">•</span>
-                        <span>Organic Agave Extract</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-primary text-2xl">•</span>
-                        <span>Natural Citrus Extracts</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-primary text-2xl">•</span>
-                        <span>Sea Salt</span>
-                      </li>
-                      <li className="flex items-start gap-3">
-                        <span className="text-primary text-2xl">•</span>
-                        <span>A Splash of Magic ✨</span>
-                      </li>
-                    </ul>
-                    <div className="mt-6 p-4 bg-muted rounded-lg border-2 border-foreground">
-                      <p className="text-sm font-bold mb-3 text-foreground">Nutrition Facts (per 12 fl oz):</p>
-                      <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
-                        <span>Calories: 10</span>
-                        <span>Sugar: 0g</span>
-                        <span>Carbs: 2g</span>
-                        <span>Sodium: 15mg</span>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {[
+                  {
+                    icon: <Sparkles className="w-8 h-8" />,
+                    title: "Zero Sugar",
+                    description: "All the flavor, none of the guilt. Sweetened naturally!",
+                    color: "from-yellow-400 to-orange-500"
+                  },
+                  {
+                    icon: <Leaf className="w-8 h-8" />,
+                    title: "Natural Ingredients",
+                    description: "Real fruit extracts and natural flavors only.",
+                    color: "from-green-400 to-emerald-500"
+                  },
+                  {
+                    icon: <Droplets className="w-8 h-8" />,
+                    title: "Ultra Refreshing",
+                    description: "Perfectly carbonated for maximum refreshment.",
+                    color: "from-blue-400 to-cyan-500"
+                  },
+                  {
+                    icon: <Award className="w-8 h-8" />,
+                    title: "Award Winning",
+                    description: "Loved by mocktail enthusiasts everywhere!",
+                    color: "from-pink-400 to-rose-500"
+                  }
+                ].map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    whileHover={{ scale: 1.05, rotate: index % 2 === 0 ? 2 : -2 }}
+                    className="bg-card border-4 border-foreground rounded-xl p-6 shadow-lg"
+                  >
+                    <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 text-white`}>
+                      {feature.icon}
+                    </div>
+                    <h3 className="text-xl font-black mb-2">{feature.title}</h3>
+                    <p className="text-muted-foreground">{feature.description}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Product Details Section - Only for drinks */}
+      {isDrink && (
+        <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="max-w-4xl mx-auto"
+            >
+              <h2 className="text-3xl md:text-4xl font-black text-center mb-8">
+                PRODUCT DETAILS
+              </h2>
+              <Accordion type="single" collapsible defaultValue="description" className="w-full">
+                <AccordionItem value="description" className="border-4 border-foreground rounded-xl mb-4 overflow-hidden bg-background">
+                  <AccordionTrigger className="px-6 py-4 hover:no-underline font-black text-lg md:text-xl hover:bg-muted/50">
+                    📝 DESCRIPTION
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 pb-6">
+                    <div className="space-y-4 text-muted-foreground leading-relaxed">
+                      <p>
+                        Get ready to party without the hangover! Our non-alcoholic margarita is the perfect blend of zesty lime,
+                        natural sweetness, and that signature margarita tang you love - minus the tequila.
+                      </p>
+                      <p>
+                        Made with premium ingredients and zero sugar, this refreshing beverage delivers all the flavor and fun
+                        of a classic margarita in a convenient ready-to-drink format. Whether you're the designated driver,
+                        pregnant, health-conscious, or just taking a break from alcohol, you don't have to miss out on the celebration!
+                      </p>
+                      <p className="font-bold text-foreground">
+                        Perfect for: Pool parties, game nights, celebrations, or any time you want a refreshing treat!
+                      </p>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="ingredients" className="border-4 border-foreground rounded-xl mb-4 overflow-hidden bg-background">
+                  <AccordionTrigger className="px-6 py-4 hover:no-underline font-black text-lg md:text-xl hover:bg-muted/50">
+                    🌿 INGREDIENTS
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 pb-6">
+                    <div className="space-y-4">
+                      <p className="text-muted-foreground">
+                        We believe in keeping it real! Our drinks are made with simple, natural ingredients you can feel good about:
+                      </p>
+                      <ul className="space-y-3 text-muted-foreground">
+                        <li className="flex items-start gap-3">
+                          <span className="text-primary text-2xl">•</span>
+                          <span>Carbonated Water</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-primary text-2xl">•</span>
+                          <span>Natural Lime Flavor</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-primary text-2xl">•</span>
+                          <span>Organic Agave Extract</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-primary text-2xl">•</span>
+                          <span>Natural Citrus Extracts</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-primary text-2xl">•</span>
+                          <span>Sea Salt</span>
+                        </li>
+                        <li className="flex items-start gap-3">
+                          <span className="text-primary text-2xl">•</span>
+                          <span>A Splash of Magic ✨</span>
+                        </li>
+                      </ul>
+                      <div className="mt-6 p-4 bg-muted rounded-lg border-2 border-foreground">
+                        <p className="text-sm font-bold mb-3 text-foreground">Nutrition Facts (per 12 fl oz):</p>
+                        <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
+                          <span>Calories: 10</span>
+                          <span>Sugar: 0g</span>
+                          <span>Carbs: 2g</span>
+                          <span>Sodium: 15mg</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-              
-              <AccordionItem value="howto" className="border-4 border-foreground rounded-xl overflow-hidden bg-background">
-                <AccordionTrigger className="px-6 py-4 hover:no-underline font-black text-lg md:text-xl hover:bg-muted/50">
-                  🍹 HOW TO ENJOY
-                </AccordionTrigger>
-                <AccordionContent className="px-6 pb-6">
-                  <div className="space-y-6">
-                    <div className="border-l-4 border-primary pl-4">
-                      <h4 className="font-bold text-lg mb-2 text-foreground">Classic Pour</h4>
-                      <p className="text-muted-foreground">
-                        Serve chilled over ice in your favorite glass. Garnish with a lime wedge for extra flair!
-                      </p>
-                    </div>
-                    <div className="border-l-4 border-secondary pl-4">
-                      <h4 className="font-bold text-lg mb-2 text-foreground">Frozen Delight</h4>
-                      <p className="text-muted-foreground">
-                        Blend with ice for a slushy treat. Perfect for hot summer days!
-                      </p>
-                    </div>
-                    <div className="border-l-4 border-accent pl-4">
-                      <h4 className="font-bold text-lg mb-2 text-foreground">Mocktail Magic</h4>
-                      <p className="text-muted-foreground">
-                        Mix with sparkling water and fresh fruit for a fancy mocktail experience.
-                      </p>
-                    </div>
-                    <div className="mt-6 p-4 bg-primary/10 rounded-lg border-2 border-primary">
-                      <p className="text-sm font-bold text-center text-foreground">
-                        💡 Pro Tip: Add a salt rim for the full margarita experience!
-                      </p>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </motion.div>
-        </div>
-      </section>
+                  </AccordionContent>
+                </AccordionItem>
 
-      {/* Customer Reviews */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="max-w-6xl mx-auto"
-          >
-            <h2 className="text-4xl md:text-5xl font-black text-center mb-12">
-              WHAT OUR CUSTOMERS SAY
-            </h2>
+                <AccordionItem value="howto" className="border-4 border-foreground rounded-xl overflow-hidden bg-background">
+                  <AccordionTrigger className="px-6 py-4 hover:no-underline font-black text-lg md:text-xl hover:bg-muted/50">
+                    🍹 HOW TO ENJOY
+                  </AccordionTrigger>
+                  <AccordionContent className="px-6 pb-6">
+                    <div className="space-y-6">
+                      <div className="border-l-4 border-primary pl-4">
+                        <h4 className="font-bold text-lg mb-2 text-foreground">Classic Pour</h4>
+                        <p className="text-muted-foreground">
+                          Serve chilled over ice in your favorite glass. Garnish with a lime wedge for extra flair!
+                        </p>
+                      </div>
+                      <div className="border-l-4 border-secondary pl-4">
+                        <h4 className="font-bold text-lg mb-2 text-foreground">Frozen Delight</h4>
+                        <p className="text-muted-foreground">
+                          Blend with ice for a slushy treat. Perfect for hot summer days!
+                        </p>
+                      </div>
+                      <div className="border-l-4 border-accent pl-4">
+                        <h4 className="font-bold text-lg mb-2 text-foreground">Mocktail Magic</h4>
+                        <p className="text-muted-foreground">
+                          Mix with sparkling water and fresh fruit for a fancy mocktail experience.
+                        </p>
+                      </div>
+                      <div className="mt-6 p-4 bg-primary/10 rounded-lg border-2 border-primary">
+                        <p className="text-sm font-bold text-center text-foreground">
+                          💡 Pro Tip: Add a salt rim for the full margarita experience!
+                        </p>
+                      </div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
+      {/* Customer Reviews - Only for drinks */}
+      {isDrink && (
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="max-w-6xl mx-auto"
+            >
+              <h2 className="text-4xl md:text-5xl font-black text-center mb-12">
+                WHAT OUR CUSTOMERS SAY
+              </h2>
 
             {/* Rating Summary */}
             <div className="bg-card border-4 border-foreground rounded-xl p-8 mb-8">
@@ -816,6 +888,63 @@ const ProductDetail = () => {
           </motion.div>
         </div>
       </section>
+      )}
+
+      {/* Customers Also Bought - Only for non-drink products */}
+      {!isDrink && drinkProducts.length > 0 && (
+        <section className="py-16 bg-muted/30">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <h2 className="text-3xl md:text-4xl font-black text-center mb-8">
+                CUSTOMERS ALSO BOUGHT 🦆
+              </h2>
+              <p className="text-center text-muted-foreground mb-8">
+                Complete your order with our refreshing non-alcoholic drinks!
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {drinkProducts.map((drinkProduct, index) => (
+                  <motion.div
+                    key={drinkProduct.node.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    onClick={() => navigate(`/product/${drinkProduct.node.handle}`)}
+                    className="bg-card border-4 border-foreground rounded-xl overflow-hidden cursor-pointer hover:scale-105 transition-transform shadow-lg"
+                  >
+                    <div className="aspect-square bg-gradient-to-br from-primary/20 to-accent/20 overflow-hidden">
+                      {drinkProduct.node.images.edges[0]?.node ? (
+                        <img
+                          src={drinkProduct.node.images.edges[0].node.url}
+                          alt={drinkProduct.node.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-4xl">
+                          🍹
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-black text-sm md:text-base line-clamp-1">
+                        {drinkProduct.node.title}
+                      </h3>
+                      <p className="text-primary font-bold">
+                        ${parseFloat(drinkProduct.node.priceRange.minVariantPrice.amount).toFixed(2)}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-primary via-accent to-secondary relative overflow-hidden">

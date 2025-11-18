@@ -4,15 +4,15 @@ import { Truck, Shield, Leaf } from "lucide-react";
 const values = [
   {
     icon: Truck,
-    title: "Free Shipping",
-    description: "Free standard shipping on all orders over $35",
+    title: "Zero Hangover Guarantee",
+    description: "All the flavor, none of the regrets!",
     gradient: "from-primary via-secondary to-accent",
     rotation: "rotate-[-2deg]",
   },
   {
     icon: Shield,
-    title: "Quality Guarantee",
-    description: "100% satisfaction guaranteed or your money back",
+    title: "Made for Every Occasion",
+    description: "Pool party? Picnic? Tuesday afternoon?",
     gradient: "from-secondary via-accent to-primary",
     rotation: "rotate-[1deg]",
   },

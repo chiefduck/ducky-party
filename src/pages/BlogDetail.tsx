@@ -74,8 +74,12 @@ export default function BlogDetail() {
           </Button>
 
           {/* Featured Image */}
-          <div className="aspect-video bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/20 border-4 border-foreground rounded-2xl md:rounded-3xl mb-8 md:mb-12 flex items-center justify-center overflow-hidden">
-            <div className="w-full h-full bg-muted/50"></div>
+          <div className="aspect-video border-4 border-foreground rounded-2xl md:rounded-3xl mb-8 md:mb-12 overflow-hidden">
+            <img
+              src={article.image}
+              alt={article.title}
+              className="w-full h-full object-cover"
+            />
           </div>
 
           {/* Article Content */}
@@ -144,8 +148,12 @@ export default function BlogDetail() {
                   transition={{ duration: 0.2 }}
                   className="bg-secondary/10 border-4 border-foreground rounded-2xl md:rounded-3xl overflow-hidden h-full flex flex-col"
                 >
-                  <div className="aspect-video bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/20 flex items-center justify-center border-b-4 border-foreground">
-                    <div className="w-full h-full bg-muted/50"></div>
+                  <div className="aspect-video border-b-4 border-foreground overflow-hidden">
+                    <img
+                      src={related.image}
+                      alt={related.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div className="p-4 md:p-6 flex flex-col flex-grow">
                     <Badge className="w-fit mb-2 md:mb-3 text-xs md:text-sm">

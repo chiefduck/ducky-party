@@ -42,7 +42,7 @@ Stay hydrated, stay happy! 🦆`,
     author: "Dr. Duck",
     date: "2024-11-10",
     readTime: "5 min read",
-    image: "/placeholder.svg"
+    image: "/images/blog/science_image.jpg"
   },
   {
     id: "5-wild-mocktail-recipes",
@@ -108,7 +108,7 @@ Tag us in your creations @rubberduckydrink! 🦆`,
     author: "Chef Ducky",
     date: "2024-11-05",
     readTime: "4 min read",
-    image: "/placeholder.svg"
+    image: "/images/blog/mocktail_blog.jpg"
   },
   {
     id: "sustainability-journey",
@@ -136,13 +136,6 @@ Our production facilities use 40% less water than industry average through innov
 ### 4. Sustainable Sourcing
 All our natural flavors come from sustainably-managed farms with fair labor practices.
 
-## The Numbers
-
-Since launching, we've:
-- ♻️ Recycled 10 million cans
-- 🌱 Offset 500 tons of CO2
-- 💧 Saved 2 million gallons of water
-- 🌍 Planted 50,000 trees
 
 ## What You Can Do
 
@@ -158,7 +151,7 @@ Together, we can make the world a better place – one refreshing sip at a time!
     author: "Green Ducky",
     date: "2024-10-28",
     readTime: "6 min read",
-    image: "/placeholder.svg"
+    image: "/images/blog/recycle_marg.jpg"
   },
   {
     id: "behind-the-scenes",
@@ -187,20 +180,9 @@ We bring in real people (like you!) to try our finalists and give honest feedbac
 ### Phase 5: Production (Weeks 25+)
 The winning flavor goes into production planning, packaging design, and finally – to your fridge!
 
-## Meet the Team
-
-### Sarah "The Nose" Johnson - Lead Flavor Scientist
-With over 15 years in beverage development, Sarah can identify flavor compounds by smell alone. She's tasted over 10,000 different flavor combinations!
-
-### Marcus "Mix Master" Chen - Production Lead
-Marcus ensures every batch tastes exactly like it should. Quality control is his superpower!
-
-### Lisa "Lemon Drop" Rodriguez - Innovation Director
-Lisa dreams up our wildest flavor ideas. That Watermelon Jalapeño? That was all Lisa!
-
 ## Fun Flavor Facts
 
-- 🦆 We go through 500+ pounds of lemons testing each citrus flavor
+- 🦆 We go through 500+ pounds of limes testing each citrus flavor
 - 🌶️ Our spicy flavors are tested on a "heat scale" from 1-10
 - 🧪 Every batch is tested at different temperatures (because cold affects flavor!)
 - 👅 Our tasting panel samples up to 30 flavors per session
@@ -212,6 +194,6 @@ We're always working on new flavors! Follow us on social media to vote on upcomi
     author: "The Ducky Team",
     date: "2024-10-15",
     readTime: "7 min read",
-    image: "/placeholder.svg"
+    image: "/images/blog/lab_blog.jpg"
   }
 ];

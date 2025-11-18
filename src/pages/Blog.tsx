@@ -60,8 +60,12 @@ export default function Blog() {
           <Link to={`/blog/${articles[0].id}`}>
             <div className="bg-primary/10 border-4 border-foreground rounded-3xl overflow-hidden hover:scale-[1.02] transition-transform">
               <div className="grid md:grid-cols-2 gap-8">
-                <div className="aspect-video md:aspect-auto bg-secondary/20 flex items-center justify-center">
-                  <span className="text-8xl">🦆</span>
+                <div className="aspect-video md:aspect-auto bg-secondary/20 flex items-center justify-center overflow-hidden">
+                  <img
+                    src={articles[0].image}
+                    alt={articles[0].title}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-8 flex flex-col justify-center">
                   <Badge className="w-fit mb-4 text-base py-1 px-4">
@@ -112,8 +116,12 @@ export default function Blog() {
                 whileHover={{ scale: 1.05 }}
                 className="bg-secondary/10 border-4 border-foreground rounded-3xl overflow-hidden h-full flex flex-col"
               >
-                <div className="aspect-video bg-primary/20 flex items-center justify-center border-b-4 border-foreground">
-                  <span className="text-6xl">🦆</span>
+                <div className="aspect-video bg-primary/20 flex items-center justify-center border-b-4 border-foreground overflow-hidden">
+                  <img
+                    src={article.image}
+                    alt={article.title}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <div className="p-6 flex flex-col flex-grow">
                   <Badge className="w-fit mb-3">

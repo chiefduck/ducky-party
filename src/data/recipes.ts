@@ -8,15 +8,9 @@ export interface Recipe {
   gradient: string;
   rotation: string;
   borderColor: string;
+  image: string;
   ingredients: string[];
   instructions: string[];
-  nutritionalInfo: {
-    calories: number;
-    sugar: string;
-    carbs: string;
-    protein: string;
-    sodium: string;
-  };
   rating: number;
   reviews: number;
 }
@@ -32,6 +26,7 @@ export const recipes: Recipe[] = [
     gradient: "from-[hsl(var(--primary))] to-[hsl(var(--accent))]",
     rotation: "-rotate-2",
     borderColor: "border-[hsl(var(--primary))]",
+    image: "/images/recipes/classic-serve.jpg",
     ingredients: [
       "1 can Rubber Ducky Drink (your favorite flavor)",
       "Ice cubes",
@@ -45,13 +40,6 @@ export const recipes: Recipe[] = [
       "Add a cocktail umbrella for maximum fun",
       "Enjoy immediately!",
     ],
-    nutritionalInfo: {
-      calories: 45,
-      sugar: "0g",
-      carbs: "11g",
-      protein: "0g",
-      sodium: "15mg",
-    },
     rating: 4.8,
     reviews: 234,
   },
@@ -65,8 +53,9 @@ export const recipes: Recipe[] = [
     gradient: "from-lime-400 to-green-500",
     rotation: "rotate-1",
     borderColor: "border-lime-500",
+    image: "/images/recipes/classic_frozen.jpg",
     ingredients: [
-      "2 cans Rubber Ducky Lime Margarita flavor",
+      "2 cans Rubber Ducky Classic Margarita flavor",
       "2 cups ice cubes",
       "Lime wedges for garnish",
       "Tajín or salt for rim (optional)",
@@ -80,13 +69,6 @@ export const recipes: Recipe[] = [
       "Garnish with lime wedge and mint",
       "Serve immediately with a fun straw",
     ],
-    nutritionalInfo: {
-      calories: 50,
-      sugar: "0g",
-      carbs: "12g",
-      protein: "0g",
-      sodium: "18mg",
-    },
     rating: 4.9,
     reviews: 456,
   },
@@ -100,8 +82,9 @@ export const recipes: Recipe[] = [
     gradient: "from-yellow-400 to-orange-500",
     rotation: "-rotate-1",
     borderColor: "border-yellow-500",
+    image: "/images/recipes/ducky_mocktail.jpg",
     ingredients: [
-      "1 can Rubber Ducky Drink",
+      "1 can Rubber Ducky Classic",
       "1/2 cup sparkling water",
       "Fresh berries (strawberries, blueberries)",
       "Lemon slice",
@@ -115,13 +98,6 @@ export const recipes: Recipe[] = [
       "Garnish with lemon slice on rim",
       "Stir gently and enjoy!",
     ],
-    nutritionalInfo: {
-      calories: 35,
-      sugar: "0g",
-      carbs: "8g",
-      protein: "0g",
-      sodium: "12mg",
-    },
     rating: 4.7,
     reviews: 189,
   },
@@ -135,8 +111,9 @@ export const recipes: Recipe[] = [
     gradient: "from-pink-400 to-purple-500",
     rotation: "rotate-2",
     borderColor: "border-pink-500",
+    image: "/images/recipes/punch_bowl.jpg",
     ingredients: [
-      "6 cans Rubber Ducky Drink (mix flavors!)",
+      "6 cans Rubber Ducky (mix flavors!)",
       "2 cups pineapple juice",
       "1 cup orange juice",
       "2 cups sparkling water",
@@ -154,13 +131,6 @@ export const recipes: Recipe[] = [
       "Float fresh fruit slices on top",
       "Ladle into cups and garnish with edible flowers",
     ],
-    nutritionalInfo: {
-      calories: 55,
-      sugar: "6g",
-      carbs: "14g",
-      protein: "0g",
-      sodium: "20mg",
-    },
     rating: 5.0,
     reviews: 678,
   },
@@ -174,8 +144,9 @@ export const recipes: Recipe[] = [
     gradient: "from-red-400 to-orange-600",
     rotation: "-rotate-2",
     borderColor: "border-red-500",
+    image: "/images/recipes/spicy_marg.jpg",
     ingredients: [
-      "1 can Rubber Ducky Lime or Mango flavor",
+      "1 can Rubber Ducky Classic",
       "2-3 jalapeño slices",
       "Chili salt for rim",
       "Fresh lime juice (1/2 lime)",
@@ -186,19 +157,12 @@ export const recipes: Recipe[] = [
       "Muddle jalapeño slices in bottom of shaker",
       "Rim glass with chili salt",
       "Add ice to shaker with muddled jalapeño",
-      "Pour in Rubber Ducky Drink and lime juice",
+      "Pour in Rubber Ducky Classic and lime juice",
       "Add agave if desired for sweetness",
       "Shake well for 10 seconds",
       "Strain into prepared glass over fresh ice",
       "Garnish with jalapeño wheel",
     ],
-    nutritionalInfo: {
-      calories: 48,
-      sugar: "1g",
-      carbs: "11g",
-      protein: "0g",
-      sodium: "350mg",
-    },
     rating: 4.6,
     reviews: 312,
   },
@@ -212,6 +176,7 @@ export const recipes: Recipe[] = [
     gradient: "from-rose-400 to-red-500",
     rotation: "rotate-1",
     borderColor: "border-rose-500",
+    image: "/images/recipes/berry_marg.jpg",
     ingredients: [
       "1 can Rubber Ducky Strawberry flavor",
       "1/4 cup fresh strawberries",
@@ -225,17 +190,10 @@ export const recipes: Recipe[] = [
       "Add basil leaves",
       "Muddle gently to release juices",
       "Fill glass with ice",
-      "Pour Rubber Ducky Drink over muddled berries",
+      "Pour Rubber Ducky Strawberry over muddled berries",
       "Stir gently to combine",
       "Garnish with whole berries and basil sprig",
     ],
-    nutritionalInfo: {
-      calories: 60,
-      sugar: "4g",
-      carbs: "15g",
-      protein: "1g",
-      sodium: "15mg",
-    },
     rating: 4.9,
     reviews: 523,
   },
@@ -249,8 +207,9 @@ export const recipes: Recipe[] = [
     gradient: "from-amber-400 to-yellow-500",
     rotation: "-rotate-1",
     borderColor: "border-amber-500",
+    image: "/images/recipes/tropical_marg.jpg",
     ingredients: [
-      "2 cans Rubber Ducky Mango or Pineapple flavor",
+      "2 cans Rubber Ducky Classic",
       "1 cup coconut water",
       "1/2 cup pineapple juice",
       "Pineapple wedges",
@@ -259,20 +218,13 @@ export const recipes: Recipe[] = [
     ],
     instructions: [
       "Fill two tall glasses with ice",
-      "In each glass, pour 1 can Rubber Ducky Drink",
+      "In each glass, pour 1 can Rubber Ducky Classic",
       "Add 1/2 cup coconut water per glass",
       "Add 1/4 cup pineapple juice per glass",
       "Stir well to combine",
       "Garnish with pineapple wedge and coconut flakes",
       "Add a fun umbrella and serve!",
     ],
-    nutritionalInfo: {
-      calories: 65,
-      sugar: "8g",
-      carbs: "16g",
-      protein: "1g",
-      sodium: "25mg",
-    },
     rating: 4.8,
     reviews: 401,
   },
@@ -286,8 +238,9 @@ export const recipes: Recipe[] = [
     gradient: "from-emerald-400 to-teal-500",
     rotation: "rotate-2",
     borderColor: "border-emerald-500",
+    image: "/images/recipes/mint_marg.jpg",
     ingredients: [
-      "1 can Rubber Ducky Lime flavor",
+      "1 can Rubber Ducky Classic",
       "1/4 cucumber, sliced thin",
       "8-10 fresh mint leaves",
       "1/2 lime, juiced",
@@ -299,19 +252,12 @@ export const recipes: Recipe[] = [
       "In a cocktail shaker, muddle cucumber and mint leaves",
       "Add lime juice and honey",
       "Fill shaker with ice",
-      "Pour in Rubber Ducky Drink",
+      "Pour in Rubber Ducky Classic",
       "Shake vigorously for 15 seconds",
       "Strain into glass filled with fresh ice",
       "Top with splash of soda water",
       "Garnish with cucumber ribbon and mint sprig",
     ],
-    nutritionalInfo: {
-      calories: 52,
-      sugar: "5g",
-      carbs: "13g",
-      protein: "0g",
-      sodium: "18mg",
-    },
     rating: 4.7,
     reviews: 267,
   },
@@ -325,9 +271,10 @@ export const recipes: Recipe[] = [
     gradient: "from-orange-400 via-pink-500 to-purple-600",
     rotation: "-rotate-2",
     borderColor: "border-orange-500",
+    image: "/images/recipes/sunrise_marg.jpg",
     ingredients: [
       "1 can Rubber Ducky Strawberry flavor",
-      "1 can Rubber Ducky Mango flavor",
+      "1 can Rubber Ducky Classic flavor",
       "1/2 cup orange juice",
       "1/2 cup cranberry juice",
       "1/4 cup grenadine",
@@ -340,19 +287,12 @@ export const recipes: Recipe[] = [
       "Using the back of a spoon, slowly layer cranberry juice",
       "Next, carefully layer the Rubber Ducky Strawberry",
       "Layer orange juice next",
-      "Top with Rubber Ducky Mango flavor",
+      "Top with Rubber Ducky Classic flavor",
       "Do not stir - you want the layers!",
       "Garnish with orange slice on rim",
       "Take a photo before drinking (it's too pretty not to!)",
       "Stir before drinking to enjoy all the flavors",
     ],
-    nutritionalInfo: {
-      calories: 70,
-      sugar: "10g",
-      carbs: "18g",
-      protein: "0g",
-      sodium: "22mg",
-    },
     rating: 5.0,
     reviews: 891,
   },

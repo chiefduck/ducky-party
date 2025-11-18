@@ -102,7 +102,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-12 px-4 w-full max-w-2xl mx-auto"
+          className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-8 sm:mb-12 px-4 w-full max-w-3xl mx-auto"
         >
           <Button
             asChild
@@ -133,7 +133,7 @@ export const Hero = () => {
         >
           {[
             { text: "0% BOOZE", color: "bg-primary", rotate: -3 },
-            { text: "60 CALS", color: "bg-secondary", rotate: 2 },
+            { text: "80 CALS", color: "bg-secondary", rotate: 2 },
             { text: "100% VIBES", color: "bg-accent", rotate: -2 },
           ].map((badge, i) => (
             <motion.div

@@ -84,7 +84,7 @@ export const FutureFlavors = () => {
                 </p>
                 <div className="pt-4">
                   <Badge variant="secondary" className="text-sm">
-                    Coming 2025
+                    Coming 2026
                   </Badge>
                 </div>
               </div>

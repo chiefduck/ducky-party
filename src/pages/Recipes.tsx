@@ -7,10 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Search, Clock, Users, ChefHat } from "lucide-react";
 import { motion } from "framer-motion";
 import { recipes } from "@/data/recipes";
+import { RecipeSubmitModal } from "@/components/RecipeSubmitModal";
 
 const Recipes = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [showRecipeSubmit, setShowRecipeSubmit] = useState(false);
 
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -82,13 +84,31 @@ const Recipes = () => {
             DUCKY DRINK RECIPES 🍹
           </motion.h1>
           <motion.p
-            className="text-xl md:text-2xl text-foreground/90 max-w-3xl mx-auto"
+            className="text-xl md:text-2xl text-foreground/90 max-w-3xl mx-auto mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
             Discover delicious ways to enjoy our non-alcoholic beverages!
           </motion.p>
+
+          <motion.div
+            className="text-center mt-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <Button
+              onClick={() => setShowRecipeSubmit(true)}
+              size="lg"
+              className="text-lg font-black py-6 px-8 rounded-full bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            >
+              Share Your Recipe! 🦆🍹
+            </Button>
+            <p className="text-gray-600 mt-3 text-base">
+              Got a killer margarita recipe? Share it with The Flock!
+            </p>
+          </motion.div>
         </div>
       </section>
 
@@ -131,11 +151,13 @@ const Recipes = () => {
                 <div
                   className={`bg-white rounded-2xl border-4 ${recipe.borderColor} shadow-2xl p-6 space-y-4`}
                 >
-                  {/* Image Placeholder */}
-                  <div
-                    className={`w-full h-48 rounded-lg bg-gradient-to-br ${recipe.gradient} flex items-center justify-center text-6xl`}
-                  >
-                    🍹
+                  {/* Recipe Image */}
+                  <div className={`w-full h-48 rounded-lg overflow-hidden border-2 ${recipe.borderColor}`}>
+                    <img
+                      src={recipe.image}
+                      alt={recipe.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
 
                   {/* Recipe Info */}
@@ -201,12 +223,22 @@ const Recipes = () => {
             <p className="text-xl md:text-2xl text-primary-foreground/90 max-w-2xl mx-auto">
               Share your creation and get featured!
             </p>
-            <Button variant="secondary" size="lg" className="text-xl px-8 py-6">
+            <Button
+              onClick={() => setShowRecipeSubmit(true)}
+              variant="secondary"
+              size="lg"
+              className="text-xl px-8 py-6"
+            >
               SUBMIT YOUR RECIPE 🦆
             </Button>
           </motion.div>
         </div>
       </section>
+
+      <RecipeSubmitModal
+        open={showRecipeSubmit}
+        onOpenChange={setShowRecipeSubmit}
+      />
 
       <Footer />
     </div>

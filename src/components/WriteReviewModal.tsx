@@ -28,6 +28,7 @@ export const WriteReviewModal = ({ open, onOpenChange, productTitle }: WriteRevi
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [images, setImages] = useState<File[]>([]);
+  const [honeypot, setHoneypot] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof ReviewFormData, string>>>({});
 
@@ -62,6 +63,13 @@ export const WriteReviewModal = ({ open, onOpenChange, productTitle }: WriteRevi
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Honeypot check - silently reject bots
+    if (honeypot) {
+      console.log('Spam detected - submission blocked');
+      return;
+    }
+
     setErrors({});
 
     const formData = new FormData(e.currentTarget);
@@ -121,6 +129,18 @@ export const WriteReviewModal = ({ open, onOpenChange, productTitle }: WriteRevi
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Honeypot Field */}
+          <input
+            type="text"
+            name="website"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            className="absolute left-[-9999px]"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
+
           {/* Rating Selection */}
           <div className="space-y-2">
             <Label className="text-sm font-bold uppercase tracking-wider">

@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { DadJokeGenerator } from "@/components/DadJokeGenerator";
 
 const contactInfoBoxes = [
   {
@@ -50,7 +51,6 @@ const Contact = () => {
     message: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [newsletterEmail, setNewsletterEmail] = useState("");
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -107,37 +107,6 @@ const Contact = () => {
         message: "",
       });
       setErrors({});
-    }
-  };
-
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (newsletterEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newsletterEmail)) {
-      // TODO: Replace with your Make.com webhook URL
-      // const webhookUrl = "YOUR_MAKE_COM_WEBHOOK_URL";
-      // 
-      // try {
-      //   await fetch(webhookUrl, {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/json" },
-      //     body: JSON.stringify({ email: newsletterEmail }),
-      //   });
-      // } catch (error) {
-      //   console.error("Error sending to webhook:", error);
-      // }
-      
-      toast({
-        title: "Welcome to the flock!",
-        description: "You're subscribed to our newsletter!",
-      });
-      setNewsletterEmail("");
-    } else {
-      toast({
-        title: "Oops!",
-        description: "Please enter a valid email address",
-        variant: "destructive",
-      });
     }
   };
 
@@ -311,36 +280,10 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Newsletter Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20">
+      {/* Dad Joke Generator Section */}
+      <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="bg-card rounded-2xl border-4 border-foreground shadow-2xl p-12 rotate-[-1deg] hover:rotate-0 transition-all duration-300">
-              <h2 className="text-5xl font-black mb-4 text-foreground">
-                JOIN THE FLOCK
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Get exclusive updates, special offers, and duck puns delivered straight to your inbox!
-              </p>
-              
-              <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-4">
-                <Input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={newsletterEmail}
-                  onChange={(e) => setNewsletterEmail(e.target.value)}
-                  className="border-2 flex-1 text-lg"
-                />
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="text-xl font-black whitespace-nowrap"
-                >
-                  SUBSCRIBE 🎉
-                </Button>
-              </form>
-            </div>
-          </div>
+          <DadJokeGenerator />
         </div>
       </section>
 

@@ -17,7 +17,7 @@ const Shop = () => {
   const [filteredProducts, setFilteredProducts] = useState<ShopifyProduct[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [categories, setCategories] = useState<string[]>(["All"]);
+  const categories = ["All", "Drinks", "Clothing", "Merch"];
   const addItem = useCartStore(state => state.addItem);
 
   useEffect(() => {
@@ -26,26 +26,6 @@ const Shop = () => {
         const fetchedProducts = await fetchProducts(20);
         setProducts(fetchedProducts);
         setFilteredProducts(fetchedProducts);
-
-        // Extract unique categories from BOTH product types AND tags
-        const uniqueCategories = new Set<string>();
-        fetchedProducts.forEach(product => {
-          // Add product type
-          if (product.node.productType) {
-            uniqueCategories.add(product.node.productType);
-          }
-          // Add all tags
-          if (product.node.tags && product.node.tags.length > 0) {
-            product.node.tags.forEach(tag => {
-              // Only add meaningful tags (skip internal ones like 'homepage')
-              if (tag && !tag.toLowerCase().includes('homepage')) {
-                uniqueCategories.add(tag);
-              }
-            });
-          }
-        });
-
-        setCategories(["All", ...Array.from(uniqueCategories).sort()]);
       } catch (error) {
         console.error('Error fetching products:', error);
         toast.error("Failed to load products");
@@ -61,18 +41,23 @@ const Shop = () => {
     if (selectedCategory === "All") {
       setFilteredProducts(products);
     } else {
-      // Filter by BOTH productType AND tags
       setFilteredProducts(
         products.filter(product => {
-          // Check if category matches productType
-          const matchesType = product.node.productType === selectedCategory;
+          const tags = product.node.tags?.map(t => t.toLowerCase()) || [];
 
-          // Check if category matches any tag (case-insensitive)
-          const matchesTag = product.node.tags && product.node.tags.some(tag =>
-            tag.toLowerCase() === selectedCategory.toLowerCase()
-          );
+          if (selectedCategory === "Drinks") {
+            return tags.includes('drinks');
+          }
 
-          return matchesType || matchesTag;
+          if (selectedCategory === "Clothing") {
+            return tags.includes('clothing');
+          }
+
+          if (selectedCategory === "Merch") {
+            return tags.includes('merch');
+          }
+
+          return false;
         })
       );
     }

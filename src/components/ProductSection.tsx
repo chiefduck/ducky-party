@@ -181,15 +181,24 @@ export const ProductSection = () => {
                   {product.node.priceRange.minVariantPrice.currencyCode} {parseFloat(product.node.priceRange.minVariantPrice.amount).toFixed(2)}
                 </p>
 
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleAddToCart(product);
-                  }}
-                  className="w-full bg-foreground text-background hover:bg-foreground/90 font-black text-lg"
-                >
-                  GRAB NOW 🦆
-                </Button>
+                {product.node.variants.edges[0]?.node.availableForSale ? (
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product);
+                    }}
+                    className="w-full bg-foreground text-background hover:bg-foreground/90 font-black text-lg"
+                  >
+                    GRAB NOW 🦆
+                  </Button>
+                ) : (
+                  <Button
+                    disabled
+                    className="w-full bg-gray-400 text-white font-black text-lg cursor-not-allowed opacity-60"
+                  >
+                    SOLD OUT 😢
+                  </Button>
+                )}
               </motion.div>
             ))}
           </div>

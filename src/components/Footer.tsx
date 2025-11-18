@@ -136,7 +136,7 @@ export const Footer = () => {
               </a>
             </div>
             <p className="text-sm opacity-75">
-              © 2024 Rubber Ducky Drink Co. All rights reserved.
+            © {new Date().getFullYear()} Rubber Ducky Drink Co. All rights reserved.
             </p>
             <p className="text-xs opacity-50">
               Made with chaos and love by the Rubber Ducky team
