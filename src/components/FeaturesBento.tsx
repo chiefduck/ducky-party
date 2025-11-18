@@ -10,7 +10,7 @@ const features = [
   },
   {
     icon: Flame,
-    title: "60 Calories",
+    title: "80 Calories",
     color: "bg-gradient-to-br from-secondary to-secondary/70",
     size: "lg:col-span-1",
   },
