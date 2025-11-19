@@ -11,7 +11,7 @@ const futureFlavors = [
     borderColor: "border-orange-400"
   },
   {
-    name: "Piña Colada",
+    name: "Tropical",
     emoji: "🥥",
     description: "Tropical paradise in a can",
     color: "from-yellow-400/20 to-amber-400/20",
